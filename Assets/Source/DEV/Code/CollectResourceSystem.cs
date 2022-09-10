@@ -98,7 +98,7 @@ public class CollectResourceSystem : GameSystemWithScreen<GameScreen>
         resource.EffectObject.SetActive(true);
         resource.EffectObject.transform.DORotate(FastExtensions.RandomVector3(), 0.5f, RotateMode.FastBeyond360);
         resource.EffectObject.transform.DOScale(new Vector3(0.5f, 0.5f, 0.5f), 0.5f);
-        resource.EffectObject.transform.DOMoveY(5f, 0.2f).OnComplete(() => resource.EffectObject.transform.DOMove(game.Player.transform.position, 0.35f).OnComplete(() => resource.EffectObject.SetActive(false)));
+        resource.EffectObject.transform.DOLocalMoveY(5f, 0.2f).OnComplete(() => resource.EffectObject.transform.DOMove(game.Player.transform.position, 0.35f).OnComplete(() => resource.EffectObject.SetActive(false)));
     }
 
     private void FindAvailableResources()

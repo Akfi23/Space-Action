@@ -31,7 +31,7 @@ public class PlayerCombatSystem : GameSystem
     {
         counter += Time.deltaTime;
 
-        if (counter >= 1)
+        if (counter >= 0.7)
         {
             var projectile = Instantiate(bullet, shootPoint.transform.position, Quaternion.identity, null); // there will be Pool
             projectile.transform.forward = gun.forward;
@@ -45,7 +45,7 @@ public class PlayerCombatSystem : GameSystem
         {
             foreach (var bul in bullets)
             {
-                bul.transform.position += bul.transform.forward * Time.deltaTime * 10;
+                bul.transform.position += bul.transform.forward * Time.deltaTime * 20;
             }
         }
     }
