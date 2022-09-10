@@ -4,26 +4,28 @@ using UnityEngine;
 using Kuhpik;
 using Supyrb;
 using DG.Tweening;
+using UniRx;
+using System;
+using System.Threading;
 
 public class CollectResourceSystem : GameSystemWithScreen<GameScreen>
 {
-    [SerializeField]private List<ResourceObjectComponent> resources = new List<ResourceObjectComponent>();
-
+    [SerializeField] private List<ResourceObjectComponent> resources = new List<ResourceObjectComponent>();
     [SerializeField] private float interactingMagnitude;
 
     public override void OnInit()
     {
         Signals.Get<OnHitResource>().AddListener(StartCollectRoutine);
-        Signals.Get<OnTriggerCollide>().AddListener(SwitchAnimStatus);
+        Signals.Get<OnTriggerCollide>().AddListener(OnResourceCollide);
     }
 
-    private void SwitchAnimStatus(Transform target,bool status)
+    private void OnResourceCollide(Transform target, bool status)
     {
         if (!target.TryGetComponent(out ResourceObjectComponent resource)) return;
 
         if (status && !resources.Contains(resource))
             resources.Add(resource);
-        else if(!status && resources.Contains(resource))
+        else if (!status && resources.Contains(resource))
             resources.Remove(resource);
 
         FindAvailableResources();
@@ -31,7 +33,11 @@ public class CollectResourceSystem : GameSystemWithScreen<GameScreen>
 
     private void StartCollectRoutine(ResourceObjectComponent resource)
     {
-        StartCoroutine(CollectResourceByHit(resource));
+        Observable.WhenAll
+            (
+                CollectResourceByHit(resource).ToObservable(),
+                ShakingRoutine(resource).ToObservable()
+            ).Subscribe().AddTo(this);
     }
 
     private IEnumerator CollectResourceByHit(ResourceObjectComponent resource)
@@ -40,27 +46,21 @@ public class CollectResourceSystem : GameSystemWithScreen<GameScreen>
         {
             resource.HideModelPart();
             resource.IncreaseHitCounter();
+            game.Player.FX.ToolEffect.transform.SetParent(resource.transform);
             game.Player.FX.ToolEffect.transform.position = resource.GetCurrentPartPosition();
             game.Player.FX.ToolEffect.Play();
-            StartCoroutine(ShakingRoutine(resource));
             ThrowResourceToPlayer(resource);
         }
 
         yield return new WaitForSeconds(0.1f);
-        if(resource.HitCounter==resource.GetModelsCount())
-        {
-            //if (resources.Contains(resource))
-            //{
-            //    Debug.Log(resource.Type);
-            //    resources.Remove(resource);
-            //}
-            //FindAvailableResources();
 
-            StartCoroutine(RespawnRoutine(resource));
+        if (resource.HitCounter == resource.GetModelsCount())
+        {
+            RespawnRoutine(resource).ToObservable().Subscribe();
         }
     }
 
-    private IEnumerator ShakingRoutine(ResourceObjectComponent resource) 
+    private IEnumerator ShakingRoutine(ResourceObjectComponent resource)
     {
         Vector3 RandomVec;
 
@@ -87,7 +87,7 @@ public class CollectResourceSystem : GameSystemWithScreen<GameScreen>
         resource.RenewHitCount();
         resource.SwitchObjectActiveStatus(true);
         resource.transform.localScale = Vector3.one * 0.15f;
-        resource.transform.DOScale(Vector3.one*0.333f,0.25f);
+        resource.transform.DOScale(Vector3.one * 0.333f, 0.25f);
     }
 
     private void ThrowResourceToPlayer(ResourceObjectComponent resource)
@@ -109,13 +109,15 @@ public class CollectResourceSystem : GameSystemWithScreen<GameScreen>
 
         if (resources.Count > 0)
         {
-            game.Player.Animator.Animator.SetLayerWeight(1, 1f);
+            game.Player.Animator.OnHitLayer();
+
             game.Player.ToolHolder.Tool.gameObject.SetActive(true);
             game.Player.ToolHolder.GunHolder.gameObject.SetActive(false);
         }
         else
         {
-            game.Player.Animator.Animator.SetLayerWeight(1, 0);
+            game.Player.Animator.OffHitLayer();
+
             game.Player.ToolHolder.Tool.gameObject.SetActive(false);
         }
     }

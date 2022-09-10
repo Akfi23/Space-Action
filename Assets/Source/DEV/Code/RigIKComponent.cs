@@ -37,7 +37,7 @@ public class RigIKComponent : MonoBehaviour
 
     public void DeactivateRig()
     {
-        DOVirtual.Float(rigBody.weight, 0, 1.5f, SetRigsWeight)/*.OnComplete(() => gunHolder.transform.DOLocalRotate(new Vector3(-90f, -90, 180), 0.5f)*/;
+        DOVirtual.Float(rigBody.weight, 0, 1.5f, SetRigsWeight);
     }
 
     private void SetRigsWeight(float value)

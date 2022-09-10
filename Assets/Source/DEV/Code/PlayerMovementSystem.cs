@@ -1,10 +1,13 @@
 using Kuhpik;
 using System.Collections;
 using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 
 public class PlayerMovementSystem : GameSystem
 {
+    private CompositeDisposable disposable = new CompositeDisposable();
+
     private Vector3 direction;
     private Vector3 previousPosition;
     private float moveLerpedValue;
@@ -16,9 +19,16 @@ public class PlayerMovementSystem : GameSystem
     public override void OnInit()
     {
         game.Player.Animator.SetMoveSpeedAnimator(0);
+
+        Observable.EveryUpdate().Subscribe(_ => { MovePlayerByJoystick(); }).AddTo(disposable);
     }
 
-    public override void OnUpdate()
+    public override void OnGameEnd()
+    {
+        disposable.Clear();
+    }
+
+    public void MovePlayerByJoystick()
     {
         if (!game.Player.Agent.enabled) return;
 

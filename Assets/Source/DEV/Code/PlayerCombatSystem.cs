@@ -3,10 +3,13 @@ using Kuhpik;
 using Supyrb;
 using System.Collections;
 using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 
 public class PlayerCombatSystem : GameSystem
 {
+    private CompositeDisposable disposable = new CompositeDisposable();
+
     [SerializeField] private EnemyComponent target;
     [SerializeField] private GameObject bullet;
 
@@ -24,27 +27,19 @@ public class PlayerCombatSystem : GameSystem
         Signals.Get<OnEnemyDie>().AddListener(FindNextTargetAfterKill);
     }
 
-    public override void OnUpdate()
+    private void Shoot()
     {
-        if (!game.isAttack) return;
-
-        game.Player.RigComponent.ArmTarget.position = target.transform.position + Vector3.up * 1.3f;
-        game.Player.RigComponent.BodyTarget.position = target.transform.position + Vector3.up * 2f;
-
         counter += Time.deltaTime;
 
         if (counter >= 1)
         {
-            var projectile = Instantiate(bullet, shootPoint.transform.position, Quaternion.identity, null);
+            var projectile = Instantiate(bullet, shootPoint.transform.position, Quaternion.identity, null); // there will be Pool
             projectile.transform.forward = gun.forward;
             game.Player.FX.ShootEffect.Play();
 
             bullets.Add(projectile);
             counter = 0;
         }
-
-        Quaternion rot = Quaternion.LookRotation(game.Player.RigComponent.ArmTarget.position - gun.transform.position);
-        gun.rotation = rot;
 
         if (bullets.Count > 0)
         {
@@ -53,6 +48,14 @@ public class PlayerCombatSystem : GameSystem
                 bul.transform.position += bul.transform.forward * Time.deltaTime * 10;
             }
         }
+    }
+
+    private void Aim()
+    {
+        game.Player.RigComponent.ArmTarget.position = target.transform.position + Vector3.up * 1.3f;
+        game.Player.RigComponent.BodyTarget.position = target.transform.position + Vector3.up * 2f;
+        Quaternion rot = Quaternion.LookRotation(game.Player.RigComponent.ArmTarget.position - gun.transform.position);
+        gun.rotation = rot;
     }
 
     private void ManageEnemyList(Transform enemy, bool status)
@@ -89,8 +92,9 @@ public class PlayerCombatSystem : GameSystem
             {
                 target = enemies[0];
                 game.isAttack = true;
+                StartShooting();
                 game.Player.RigComponent.ActivateRig();
-                game.Player.Animator.Animator.SetLayerWeight(1, 0);
+                game.Player.Animator.OffHitLayer();
                 game.Player.ToolHolder.GunHolder.gameObject.SetActive(true);
                 game.Player.ToolHolder.Tool.gameObject.SetActive(false);
             }
@@ -98,7 +102,9 @@ public class PlayerCombatSystem : GameSystem
         else
         {
             game.isAttack = false;
+            StopShooting();
             game.Player.RigComponent.DeactivateRig();
+
             gun.transform.DOLocalRotate(new Vector3(-90f, -90, 180), 0.5f)
                 .OnComplete(() => game.Player.ToolHolder.GunHolder.gameObject.SetActive(false));
         }
@@ -108,5 +114,16 @@ public class PlayerCombatSystem : GameSystem
     {
         RemoveEnemyFromList(enemy);
         TryAttackEnemy();
+    }
+
+    private void StartShooting()
+    {
+        Observable.EveryUpdate().Subscribe(_ => { Aim(); }).AddTo(disposable);
+        Observable.EveryUpdate().Subscribe(_ => { Shoot(); }).AddTo(disposable);
+    }
+
+    private void StopShooting()
+    {
+        disposable.Clear();
     }
 }
