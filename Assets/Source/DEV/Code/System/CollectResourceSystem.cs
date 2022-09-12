@@ -33,11 +33,8 @@ public class CollectResourceSystem : GameSystemWithScreen<GameScreen>
 
     private void StartCollectRoutine(ResourceObjectComponent resource)
     {
-        Observable.WhenAll
-            (
-                CollectResourceByHit(resource).ToObservable(),
-                ShakingRoutine(resource).ToObservable()
-            ).Subscribe().AddTo(this);
+        StartCoroutine(CollectResourceByHit(resource));
+        StartCoroutine(ShakingRoutine(resource));
     }
 
     private IEnumerator CollectResourceByHit(ResourceObjectComponent resource)
@@ -56,7 +53,7 @@ public class CollectResourceSystem : GameSystemWithScreen<GameScreen>
 
         if (resource.HitCounter == resource.GetModelsCount())
         {
-            RespawnRoutine(resource).ToObservable().Subscribe();
+            StartCoroutine(RespawnRoutine(resource));
         }
     }
 
@@ -80,6 +77,7 @@ public class CollectResourceSystem : GameSystemWithScreen<GameScreen>
             Debug.Log(resource.Type);
             resources.Remove(resource);
         }
+
         FindAvailableResources();
 
         resource.SwitchObjectActiveStatus(false);

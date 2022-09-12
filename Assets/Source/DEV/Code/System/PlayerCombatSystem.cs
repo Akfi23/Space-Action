@@ -1,53 +1,80 @@
 using DG.Tweening;
 using Kuhpik;
+using Kuhpik.Pooling;
 using Supyrb;
-using System.Collections;
 using System.Collections.Generic;
-using UniRx;
 using UnityEngine;
 
 public class PlayerCombatSystem : GameSystem
 {
-    private CompositeDisposable disposable = new CompositeDisposable();
-
     [SerializeField] private EnemyComponent target;
     [SerializeField] private GameObject bullet;
 
     private List<EnemyComponent> enemies = new List<EnemyComponent>();
-    private List<GameObject> bullets = new List<GameObject>();
     private Transform gun;
     private Transform shootPoint;
     private float counter;
 
     public override void OnInit()
     {
+        PrepareBullets();
+
         gun = game.Player.ToolHolder.GunHolder;
         shootPoint = game.Player.ToolHolder.ShootPoint;
         Signals.Get<OnEnemyInArea>().AddListener(ManageEnemyList);
         Signals.Get<OnEnemyDie>().AddListener(FindNextTargetAfterKill);
     }
 
-    private void Shoot()
+    public override void OnUpdate()
+    {
+        MoveBullets();
+
+        if (!game.isAttack) return;
+
+        TryToShoot();
+        Aim();
+    }
+
+    private void PrepareBullets()
+    {
+        int poolCapacity = PoolInstaller.Instance.GetPool("Bullet").Capacity;
+
+        for (int i = 0; i < poolCapacity; i++)
+        {
+            GameObject projectile = PoolingSystem.GetObject(bullet);
+            game.Bullets.Add(projectile);
+        }
+
+        foreach (var bullet in game.Bullets)
+        {
+            bullet.SetActive(false);
+        }
+    }
+
+    public override void OnGameEnd()
+    {
+        PoolingSystem.Clear();
+    }
+
+    private void TryToShoot()
     {
         counter += Time.deltaTime;
 
         if (counter >= 0.7)
         {
-            var projectile = Instantiate(bullet, shootPoint.transform.position, Quaternion.identity, null); // there will be Pool
-            projectile.transform.forward = gun.forward;
+            GameObject projectile = GetBullet();
             game.Player.FX.ShootEffect.Play();
-
-            bullets.Add(projectile);
             counter = 0;
         }
+    }
 
-        if (bullets.Count > 0)
-        {
-            foreach (var bul in bullets)
-            {
-                bul.transform.position += bul.transform.forward * Time.deltaTime * 20;
-            }
-        }
+    private GameObject GetBullet()
+    {
+        GameObject projectile = PoolingSystem.GetObject(bullet);
+        projectile.transform.position = shootPoint.transform.position;
+        projectile.transform.forward = gun.forward;
+
+        return projectile;
     }
 
     private void Aim()
@@ -91,22 +118,12 @@ public class PlayerCombatSystem : GameSystem
             if (enemies[0].CurrentHealth > 0)
             {
                 target = enemies[0];
-                game.isAttack = true;
                 StartShooting();
-                game.Player.RigComponent.ActivateRig();
-                game.Player.Animator.OffHitLayer();
-                game.Player.ToolHolder.GunHolder.gameObject.SetActive(true);
-                game.Player.ToolHolder.Tool.gameObject.SetActive(false);
             }
         }
         else
         {
-            game.isAttack = false;
             StopShooting();
-            game.Player.RigComponent.DeactivateRig();
-
-            gun.transform.DOLocalRotate(new Vector3(-90f, -90, 180), 0.5f)
-                .OnComplete(() => game.Player.ToolHolder.GunHolder.gameObject.SetActive(false));
         }
     }
 
@@ -118,12 +135,30 @@ public class PlayerCombatSystem : GameSystem
 
     private void StartShooting()
     {
-        Observable.EveryUpdate().Subscribe(_ => { Aim(); }).AddTo(disposable);
-        Observable.EveryUpdate().Subscribe(_ => { Shoot(); }).AddTo(disposable);
+        game.isAttack = true;
+        game.Player.RigComponent.ActivateRig();
+        game.Player.Animator.OffHitLayer();
+        game.Player.ToolHolder.GunHolder.gameObject.SetActive(true);
+        game.Player.ToolHolder.Tool.gameObject.SetActive(false);
     }
 
     private void StopShooting()
     {
-        disposable.Clear();
+        game.isAttack = false;
+        game.Player.RigComponent.DeactivateRig();
+        gun.transform.DOLocalRotate(new Vector3(-90f, -90, 180), 0.5f)
+            .OnComplete(() => game.Player.ToolHolder.GunHolder.gameObject.SetActive(false));
+    }
+
+    private void MoveBullets()
+    {
+        if (game.Bullets.Count > 0)
+        {
+            foreach (var bul in game.Bullets)
+            {
+                if(bul.activeSelf)
+                    bul.transform.position += bul.transform.forward * Time.deltaTime * 20;
+            }
+        }
     }
 }

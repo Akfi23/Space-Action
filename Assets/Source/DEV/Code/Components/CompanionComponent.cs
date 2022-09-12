@@ -4,14 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class HelperComponent : MonoBehaviour
+public class CompanionComponent : MonoBehaviour
 {
+    [SerializeField] Transform companionModel;
     private NavMeshAgent agent;
     public NavMeshAgent Agent => agent;
-
-    [SerializeField] Transform companionModel;
-
     public Transform CompanionModel => companionModel;
+
     public void Init()
     {
         agent = GetComponent<NavMeshAgent>();

@@ -8,7 +8,7 @@ public class PlayerLoadingSystem : GameSystem
     public override void OnInit()
     {
         game.Player = FindObjectOfType<PlayerComponent>();
-        game.Companion = FindObjectOfType<HelperComponent>();
+        game.Companion = FindObjectOfType<CompanionComponent>();
 
         game.Player.Init();
         game.Companion.Init();

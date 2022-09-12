@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Animations.Rigging;
 using DG.Tweening;
 using NaughtyAttributes;
+using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 public class RigIKComponent : MonoBehaviour
 {
@@ -18,11 +16,7 @@ public class RigIKComponent : MonoBehaviour
     [HorizontalLine(2, EColor.Blue)]
     [SerializeField] private Transform bodyTarget;
     [SerializeField] private Transform armTarget;
-    //[Header("Gun")]
-    //[HorizontalLine(2, EColor.Indigo)]
-    //[SerializeField] private Transform gunHolder;
-    //[SerializeField] private Transform gun;
-    //[SerializeField] private Transform shootPoint;
+
     public RigBuilder RigBuilder => rigBuilder;
     public MultiAimConstraint HeadConstraint => headConstraint;
     public MultiAimConstraint SpineConstraint => spineConstraint;
@@ -31,12 +25,15 @@ public class RigIKComponent : MonoBehaviour
     
     public void ActivateRig()
     {
-        DOVirtual.Float(rigBody.weight, rigBody.weight + 1f, 1.5f, SetRigsWeight);
+        if (rigBody.weight == 1) return;
+
         DOVirtual.Float(rigBody.weight, rigBody.weight + 1f, 1.5f, SetRigsWeight);
     }
 
     public void DeactivateRig()
     {
+        if (rigBody.weight == 0) return;
+
         DOVirtual.Float(rigBody.weight, 0, 1.5f, SetRigsWeight);
     }
 

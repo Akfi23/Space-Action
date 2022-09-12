@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using DG.Tweening;
 using UniRx;
 using UnityEngine;
 
@@ -42,34 +41,23 @@ public class AnimatorComponent : MonoBehaviour
     public void OnHitLayer()
     {
         float currentWeight = animator.GetLayerWeight(1);
-        disposable.Clear();
 
-        Observable.EveryUpdate().Subscribe(_ =>
-        {
-            currentWeight += Time.deltaTime * 5;
-            animator.SetLayerWeight(1, currentWeight);
+        if (currentWeight == 1) return;
 
-            if (currentWeight >= 1)
-            {
-                disposable.Clear();
-            }
-        }).AddTo(disposable);
+        DOVirtual.Float(currentWeight, 1, 1f, SetLayerHitLayerWeight);
     }
 
     public void OffHitLayer()
     {
         float currentWeight = animator.GetLayerWeight(1);
-        disposable.Clear();
 
-        Observable.EveryUpdate().Subscribe(_ =>
-        {
-            currentWeight -= Time.deltaTime * 5;
-            animator.SetLayerWeight(1, currentWeight);
+        if (currentWeight == 0) return;
 
-            if (currentWeight <= 0)
-            {
-                disposable.Clear();
-            }
-        }).AddTo(disposable);
+        DOVirtual.Float(currentWeight, 0f, 1f, SetLayerHitLayerWeight);
+    }
+
+    private void SetLayerHitLayerWeight(float weight)
+    {
+        animator.SetLayerWeight(1, weight);
     }
 }

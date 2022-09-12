@@ -20,10 +20,12 @@ namespace Kuhpik
         public bool isPlayerMoving;
 
         public PlayerComponent Player;
-        public HelperComponent Companion;
+        public CompanionComponent Companion;
         public FloatingJoystick Joystick;
         public CinemachineVirtualCamera GameCamera;
 
         public bool isAttack;
+
+        public List<GameObject> Bullets = new List<GameObject>();
     }
 }
