@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: Game Config
   m_EditorClassIdentifier: 
   playerMoveSpeed: 5
+  resourceRespawnTime: 10

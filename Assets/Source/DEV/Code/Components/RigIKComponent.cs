@@ -22,19 +22,30 @@ public class RigIKComponent : MonoBehaviour
     public MultiAimConstraint SpineConstraint => spineConstraint;
     public Transform BodyTarget => bodyTarget;
     public Transform ArmTarget => armTarget;
-    
-    public void ActivateRig()
+
+    private Tweener tweener;
+
+    public void SetRig(bool status)
     {
-        if (rigBody.weight == 1) return;
+        if (tweener != null)
+            tweener.Kill();
 
-        DOVirtual.Float(rigBody.weight, rigBody.weight + 1f, 1.5f, SetRigsWeight);
-    }
+        float tweenTime = 0;
+        float targetWeight = 0;
 
-    public void DeactivateRig()
-    {
-        if (rigBody.weight == 0) return;
+        if (status)
+        {
+            tweenTime = 1;
+            targetWeight = 1;
+        }
+        else
+        {
+            tweenTime = 0.5f;
+        }
 
-        DOVirtual.Float(rigBody.weight, 0, 1.5f, SetRigsWeight);
+        if (targetWeight == rigBody.weight) return;
+
+        tweener = DOVirtual.Float(rigBody.weight, targetWeight, tweenTime, SetRigsWeight);
     }
 
     private void SetRigsWeight(float value)

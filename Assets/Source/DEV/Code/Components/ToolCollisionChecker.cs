@@ -1,12 +1,12 @@
+using NaughtyAttributes;
 using Supyrb;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ToolCollisionChecker : MonoBehaviour
 {
     private OnHitResource hitResourceSignal;
 
+    [Button]
     public void InitToolTrigger()
     {
         hitResourceSignal = Signals.Get<OnHitResource>();

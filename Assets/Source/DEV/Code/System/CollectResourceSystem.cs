@@ -7,6 +7,7 @@ using DG.Tweening;
 using UniRx;
 using System;
 using System.Threading;
+using NaughtyAttributes;
 
 public class CollectResourceSystem : GameSystemWithScreen<GameScreen>
 {
@@ -22,6 +23,7 @@ public class CollectResourceSystem : GameSystemWithScreen<GameScreen>
     private void OnResourceCollide(Transform target, bool status)
     {
         if (!target.TryGetComponent(out ResourceObjectComponent resource)) return;
+        if (game.isAttack) return;
 
         if (status && !resources.Contains(resource))
             resources.Add(resource);
@@ -81,7 +83,7 @@ public class CollectResourceSystem : GameSystemWithScreen<GameScreen>
         FindAvailableResources();
 
         resource.SwitchObjectActiveStatus(false);
-        yield return new WaitForSeconds(10f);
+        yield return new WaitForSeconds(config.ResourceRespawnTime);
         resource.RenewHitCount();
         resource.SwitchObjectActiveStatus(true);
         resource.transform.localScale = Vector3.one * 0.15f;
@@ -107,15 +109,14 @@ public class CollectResourceSystem : GameSystemWithScreen<GameScreen>
 
         if (resources.Count > 0)
         {
-            game.Player.Animator.OnHitLayer();
+            game.Player.Animator.SetHitLayer(true);
 
             game.Player.ToolHolder.Tool.gameObject.SetActive(true);
             game.Player.ToolHolder.GunHolder.gameObject.SetActive(false);
         }
         else
         {
-            game.Player.Animator.OffHitLayer();
-
+            game.Player.Animator.SetHitLayer(false);
             game.Player.ToolHolder.Tool.gameObject.SetActive(false);
         }
     }

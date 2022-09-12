@@ -11,8 +11,7 @@ public class AnimatorComponent : MonoBehaviour
     private int FlyHash = Animator.StringToHash("IsFlying");
     private int DieHash = Animator.StringToHash("IsDie");
 
-    private CompositeDisposable disposable = new CompositeDisposable();
-
+    private Tweener tweener;
     public void InitAnimator()
     {
         animator = GetComponent<Animator>();
@@ -38,22 +37,28 @@ public class AnimatorComponent : MonoBehaviour
         animator.SetTrigger(DieHash);
     }
 
-    public void OnHitLayer()
+    public void SetHitLayer(bool status)
     {
+        if (tweener != null)
+            tweener.Kill();
+
+        float tweenTime = 0;
+        float targetWeight = 0;
         float currentWeight = animator.GetLayerWeight(1);
 
-        if (currentWeight == 1) return;
+        if (status)
+        {
+            tweenTime = 1;
+            targetWeight = 1;
+        }
+        else
+        {
+            tweenTime = 0.5f;
+        }
 
-        DOVirtual.Float(currentWeight, 1, 1f, SetLayerHitLayerWeight);
-    }
+        if (targetWeight == currentWeight) return;
 
-    public void OffHitLayer()
-    {
-        float currentWeight = animator.GetLayerWeight(1);
-
-        if (currentWeight == 0) return;
-
-        DOVirtual.Float(currentWeight, 0f, 1f, SetLayerHitLayerWeight);
+        tweener = DOVirtual.Float(currentWeight, targetWeight, tweenTime, SetLayerHitLayerWeight);
     }
 
     private void SetLayerHitLayerWeight(float weight)

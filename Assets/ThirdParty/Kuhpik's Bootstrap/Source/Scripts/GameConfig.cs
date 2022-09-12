@@ -11,7 +11,8 @@ namespace Kuhpik
         // public float MoveSpeed => moveSpeed;
 
         [SerializeField] private float playerMoveSpeed;
-
+        [SerializeField] [Range(3,30)] private int resourceRespawnTime;
         public float PlayerMoveSpeed => playerMoveSpeed;
+        public int ResourceRespawnTime => resourceRespawnTime;
     }
 }

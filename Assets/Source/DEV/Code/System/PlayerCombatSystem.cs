@@ -136,8 +136,8 @@ public class PlayerCombatSystem : GameSystem
     private void StartShooting()
     {
         game.isAttack = true;
-        game.Player.RigComponent.ActivateRig();
-        game.Player.Animator.OffHitLayer();
+        game.Player.RigComponent.SetRig(true);
+        game.Player.Animator.SetHitLayer(false);
         game.Player.ToolHolder.GunHolder.gameObject.SetActive(true);
         game.Player.ToolHolder.Tool.gameObject.SetActive(false);
     }
@@ -145,7 +145,7 @@ public class PlayerCombatSystem : GameSystem
     private void StopShooting()
     {
         game.isAttack = false;
-        game.Player.RigComponent.DeactivateRig();
+        game.Player.RigComponent.SetRig(false);
         gun.transform.DOLocalRotate(new Vector3(-90f, -90, 180), 0.5f)
             .OnComplete(() => game.Player.ToolHolder.GunHolder.gameObject.SetActive(false));
     }
