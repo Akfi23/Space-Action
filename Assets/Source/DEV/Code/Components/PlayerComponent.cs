@@ -16,6 +16,7 @@ public class PlayerComponent : CharacterComponent
     public EnemyCheckerComponent EnemyChecker => enemyChecker;
     public RigIKComponent RigComponent => rigComponent;
     public ToolHolderComponent ToolHolder => toolHolder;
+    public Circle Circle => circle;
 
     public override void Init()
     {

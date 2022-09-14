@@ -9,6 +9,7 @@ public class PlayerCombatSystem : GameSystem
 {
     [SerializeField] private EnemyComponent target;
     [SerializeField] private GameObject bullet;
+    [SerializeField] private Transform targetMarker;
 
     private Transform gun;
     private Transform shootPoint;
@@ -112,16 +113,20 @@ public class PlayerCombatSystem : GameSystem
 
     private void TryAttackEnemy()
     {
+        counter = 0;
+
         if (game.Enemies.Count > 0)
         {
             if (game.Enemies[0].CurrentHealth > 0)
             {
                 target = game.Enemies[0];
+                AttachMarkerToTarget();
                 StartShooting();
             }
         }
         else
         {
+            DetachMarker();
             StopShooting();
         }
     }
@@ -162,4 +167,18 @@ public class PlayerCombatSystem : GameSystem
             }
         }
     }
+
+    private void AttachMarkerToTarget()
+    {
+        targetMarker.gameObject.SetActive(true);
+        targetMarker.transform.SetParent(target.transform);
+        targetMarker.transform.localPosition = Vector3.zero;
+    }
+
+    private void DetachMarker()
+    {
+        targetMarker.SetParent(null);
+        targetMarker.gameObject.SetActive(false);
+    }
+        
 }

@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class PlayerMovementSystem : GameSystem
 {
-    private CompositeDisposable disposable = new CompositeDisposable();
-
     private Vector3 direction;
     private Vector3 previousPosition;
     private float moveLerpedValue;
@@ -20,12 +18,11 @@ public class PlayerMovementSystem : GameSystem
     {
         game.Player.Animator.SetMoveSpeedAnimator(0);
 
-        Observable.EveryUpdate().Subscribe(_ => { MovePlayerByJoystick(); }).AddTo(disposable);
     }
 
-    public override void OnGameEnd()
+    public override void OnUpdate()
     {
-        disposable.Clear();
+        MovePlayerByJoystick();
     }
 
     public void MovePlayerByJoystick()
@@ -52,6 +49,8 @@ public class PlayerMovementSystem : GameSystem
         game.Player.Animator.SetMoveSpeedAnimator(moveLerpedValue);
 
         previousPosition = game.Player.transform.position;
+
+        UpdateCircleRotation();
     }
 
     private Vector3 Velocity()
@@ -63,5 +62,11 @@ public class PlayerMovementSystem : GameSystem
     {
         var angle = Vector3.SignedAngle(game.Player.transform.forward, direction, Vector3.up);
         return angle / 90;
+    }
+
+    private void UpdateCircleRotation()
+    {
+        Vector3 eulerRot = new Vector3(90, -game.Player.transform.localRotation.eulerAngles.y, -game.Player.transform.localRotation.eulerAngles.z);
+        game.Player.Circle.transform.localRotation = Quaternion.Euler(eulerRot);
     }
 }
