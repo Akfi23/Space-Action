@@ -22,10 +22,10 @@ namespace Kuhpik
         public PlayerComponent Player;
         public CompanionComponent Companion;
         public FloatingJoystick Joystick;
-        public CinemachineVirtualCamera GameCamera;
 
         public bool isAttack;
 
         public List<GameObject> Bullets = new List<GameObject>();
+        public List<EnemyComponent> Enemies = new List<EnemyComponent>();
     }
 }

@@ -7,7 +7,7 @@ namespace Kuhpik
         protected PlayerData player;
         protected GameConfig config;
         protected GameData game;
-
+        protected CameraController cameraController;
         public virtual void OnCustomTick() { }
 
         public virtual void OnFixedUpdate() { }

@@ -33,7 +33,7 @@ public class PlayerMovementSystem : GameSystem
         if (!game.Player.Agent.enabled) return;
 
         direction = new Vector3(game.Joystick.Direction.x, 0, game.Joystick.Direction.y);
-        direction = Quaternion.Euler(0, game.GameCamera.transform.eulerAngles.y, 0) * direction;
+        direction = Quaternion.Euler(0, cameraController.GameCamera.transform.eulerAngles.y, 0) * direction;
 
         if (direction.sqrMagnitude > 0)
         {

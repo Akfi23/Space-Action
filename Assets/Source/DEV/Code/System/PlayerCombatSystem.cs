@@ -10,7 +10,6 @@ public class PlayerCombatSystem : GameSystem
     [SerializeField] private EnemyComponent target;
     [SerializeField] private GameObject bullet;
 
-    private List<EnemyComponent> enemies = new List<EnemyComponent>();
     private Transform gun;
     private Transform shootPoint;
     private float counter;
@@ -60,9 +59,9 @@ public class PlayerCombatSystem : GameSystem
     {
         counter += Time.deltaTime;
 
-        if (counter >= 0.7)
+        if (counter >= config.FireRate)
         {
-            GameObject projectile = GetBullet();
+            GetBullet();
             game.Player.FX.ShootEffect.Play();
             counter = 0;
         }
@@ -103,21 +102,21 @@ public class PlayerCombatSystem : GameSystem
 
     private void AddEnemyToList(EnemyComponent enemyComponent)
     {
-        enemies.Add(enemyComponent);
+        game.Enemies.Add(enemyComponent);
     }
 
     private void RemoveEnemyFromList(EnemyComponent enemyComponent)
     {
-        enemies.Remove(enemyComponent);
+        game.Enemies.Remove(enemyComponent);
     }
 
     private void TryAttackEnemy()
     {
-        if (enemies.Count > 0)
+        if (game.Enemies.Count > 0)
         {
-            if (enemies[0].CurrentHealth > 0)
+            if (game.Enemies[0].CurrentHealth > 0)
             {
-                target = enemies[0];
+                target = game.Enemies[0];
                 StartShooting();
             }
         }
@@ -140,6 +139,7 @@ public class PlayerCombatSystem : GameSystem
         game.Player.Animator.SetHitLayer(false);
         game.Player.ToolHolder.GunHolder.gameObject.SetActive(true);
         game.Player.ToolHolder.Tool.gameObject.SetActive(false);
+        cameraController.SetCombatCameraActive();
     }
 
     private void StopShooting()
@@ -148,6 +148,7 @@ public class PlayerCombatSystem : GameSystem
         game.Player.RigComponent.SetRig(false);
         gun.transform.DOLocalRotate(new Vector3(-90f, -90, 180), 0.5f)
             .OnComplete(() => game.Player.ToolHolder.GunHolder.gameObject.SetActive(false));
+        cameraController.SetGameCameraActive();
     }
 
     private void MoveBullets()

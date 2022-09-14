@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerMoveSpeed: 5
   resourceRespawnTime: 10
+  fireRate: 0.49

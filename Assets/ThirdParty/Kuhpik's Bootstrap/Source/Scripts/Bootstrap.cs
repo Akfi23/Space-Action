@@ -14,6 +14,7 @@ namespace Kuhpik
 
         public PlayerData PlayerData { get; private set; }
         public GameData GameData { get; private set; }
+        public CameraController CameraController {get;private set;}
 
         internal GameStateID[] launchStates;
         internal Dictionary<Type, GameSystem> systems;
@@ -36,6 +37,7 @@ namespace Kuhpik
         {
             itemsToInject.Add(config);
             itemsToInject.Add(new GameData());
+            itemsToInject.Add(new CameraController());
 
             systems = FindObjectsOfType<GameSystem>().ToDictionary(x => x.GetType(), x => x);
 
@@ -43,6 +45,7 @@ namespace Kuhpik
 
             GameData = itemsToInject.First(x => x.GetType() == typeof(GameData)) as GameData;
             PlayerData = itemsToInject.First(x => x.GetType() == typeof(PlayerData)) as PlayerData;
+            CameraController = itemsToInject.First(x => x.GetType() == typeof(CameraController)) as CameraController;
 
             GamePreStartEvent?.Invoke();
             GameStartEvent?.Invoke();

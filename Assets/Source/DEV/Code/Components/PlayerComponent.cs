@@ -10,6 +10,7 @@ public class PlayerComponent : CharacterComponent
     private EnemyCheckerComponent enemyChecker;
     private RigIKComponent rigComponent;
     private ToolHolderComponent toolHolder;
+    private Circle circle;
 
     public TriggerComponent Trigger => trigger;
     public EnemyCheckerComponent EnemyChecker => enemyChecker;
@@ -19,6 +20,9 @@ public class PlayerComponent : CharacterComponent
     public override void Init()
     {
         base.Init();
+
+        circle = GetComponentInChildren<Circle>();
+        circle.DrawCircle(7.5f);
 
         trigger = GetComponent<TriggerComponent>();
         trigger.InitTrigger();

@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Gun
+  - GameCamera
+  - CombatCamera
   layers:
   - Default
   - TransparentFX

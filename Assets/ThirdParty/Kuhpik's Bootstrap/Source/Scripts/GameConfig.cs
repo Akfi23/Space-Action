@@ -12,7 +12,10 @@ namespace Kuhpik
 
         [SerializeField] private float playerMoveSpeed;
         [SerializeField] [Range(3,30)] private int resourceRespawnTime;
+        [SerializeField] [Range(0.05f, 2f)] private float fireRate;
+
         public float PlayerMoveSpeed => playerMoveSpeed;
         public int ResourceRespawnTime => resourceRespawnTime;
+        public float FireRate => fireRate;
     }
 }
