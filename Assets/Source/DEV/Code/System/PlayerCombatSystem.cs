@@ -8,7 +8,6 @@ using UnityEngine;
 public class PlayerCombatSystem : GameSystem
 {
     [SerializeField] private EnemyComponent target;
-    [SerializeField] private GameObject bullet;
     [SerializeField] private Transform targetMarker;
 
     private Transform gun;
@@ -41,7 +40,7 @@ public class PlayerCombatSystem : GameSystem
 
         for (int i = 0; i < poolCapacity; i++)
         {
-            GameObject projectile = PoolingSystem.GetObject(bullet);
+            GameObject projectile = PoolingSystem.GetObject(config.BulletPrefab.gameObject);
             game.Bullets.Add(projectile);
         }
 
@@ -70,7 +69,7 @@ public class PlayerCombatSystem : GameSystem
 
     private GameObject GetBullet()
     {
-        GameObject projectile = PoolingSystem.GetObject(bullet);
+        GameObject projectile = PoolingSystem.GetObject(config.BulletPrefab.gameObject);
         projectile.transform.position = shootPoint.transform.position;
         projectile.transform.forward = gun.forward;
 
@@ -103,23 +102,24 @@ public class PlayerCombatSystem : GameSystem
 
     private void AddEnemyToList(EnemyComponent enemyComponent)
     {
-        game.Enemies.Add(enemyComponent);
+        game.EnemiesInArea.Add(enemyComponent);
     }
 
     private void RemoveEnemyFromList(EnemyComponent enemyComponent)
     {
-        game.Enemies.Remove(enemyComponent);
+        game.EnemiesInArea.Remove(enemyComponent);
     }
 
     private void TryAttackEnemy()
     {
         counter = 0;
 
-        if (game.Enemies.Count > 0)
+        if (game.EnemiesInArea.Count > 0)
         {
-            if (game.Enemies[0].CurrentHealth > 0)
+            if (game.EnemiesInArea[0].CurrentHealth > 0)
             {
-                target = game.Enemies[0];
+                target = game.EnemiesInArea[0];
+                target.FSM.SetState(StateType.Chase);
                 AttachMarkerToTarget();
                 StartShooting();
             }

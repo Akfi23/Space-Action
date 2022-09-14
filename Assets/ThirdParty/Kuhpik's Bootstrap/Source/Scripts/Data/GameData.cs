@@ -26,6 +26,7 @@ namespace Kuhpik
         public bool isAttack;
 
         public List<GameObject> Bullets = new List<GameObject>();
+        public List<EnemyComponent> EnemiesInArea = new List<EnemyComponent>();
         public List<EnemyComponent> Enemies = new List<EnemyComponent>();
     }
 }

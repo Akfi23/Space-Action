@@ -14,6 +14,8 @@ public class PlayerMovementSystem : GameSystem
     [SerializeField] private float lerpIn;
     [SerializeField] private float lerpOut;
 
+    public EnemyComponent enemy;
+
     public override void OnInit()
     {
         game.Player.Animator.SetMoveSpeedAnimator(0);
@@ -22,6 +24,8 @@ public class PlayerMovementSystem : GameSystem
 
     public override void OnUpdate()
     {
+        Debug.Log(Vector3.Distance(game.Player.transform.position, enemy.transform.position));
+
         MovePlayerByJoystick();
     }
 

@@ -1,4 +1,5 @@
 using DG.Tweening;
+using NaughtyAttributes;
 using UniRx;
 using UnityEngine;
 
@@ -7,9 +8,13 @@ public class AnimatorComponent : MonoBehaviour
     private Animator animator;
     public Animator Animator => animator;
 
+    
     private int MoveSpeedHash = Animator.StringToHash("MoveSpeed");
     private int FlyHash = Animator.StringToHash("IsFlying");
     private int DieHash = Animator.StringToHash("IsDie");
+
+    private int EnemyRunHash=Animator.StringToHash("IsMove");
+    private int EnemyAttackHash= Animator.StringToHash("IsAttack");
 
     private Tweener tweener;
     public void InitAnimator()
@@ -35,6 +40,16 @@ public class AnimatorComponent : MonoBehaviour
     public void SetDie()
     {
         animator.SetTrigger(DieHash);
+    }
+
+    public void SetEnemyAttack(bool status)
+    {
+        animator.SetBool(EnemyAttackHash,status);
+    }   
+
+    public void SetEnemyRun(bool status)
+    {
+        animator.SetBool(EnemyRunHash, status);
     }
 
     public void SetHitLayer(bool status)

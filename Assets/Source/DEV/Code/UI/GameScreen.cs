@@ -13,7 +13,12 @@ public class GameScreen : UIScreen
     [SerializeField] private Color emptyFuelColor;
     [SerializeField] private Image jetpackFuelIcon;
 
+    [Header("Health UI")]
+    [HorizontalLine(color: EColor.Red)]
+    [SerializeField] private Image healthIndicator;
+
     public Slider JetpackFuelFill => jetpackFuelFill;
     public Color EmptyFuelColor => emptyFuelColor;
     public Image JetpackFuelIcon => jetpackFuelIcon;
+    public Image HealthIndicator => healthIndicator;
 }

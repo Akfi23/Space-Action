@@ -892,6 +892,7 @@ GameObject:
   - component: {fileID: 8702272059430680554}
   - component: {fileID: 8702272059430680553}
   - component: {fileID: 9130519802549200682}
+  - component: {fileID: 6390632650937503290}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Untagged
@@ -928,7 +929,7 @@ Animator:
   m_GameObject: {fileID: 8702272059430680562}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: a19dbc383e92ecf4eb97fe31230f8a0b, type: 3}
-  m_Controller: {fileID: 9100000, guid: 382732fc87b0d6646a928144cf2c06b1, type: 2}
+  m_Controller: {fileID: 9100000, guid: 775e36f10450b41459dfc9925007f2a9, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1338,6 +1339,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hud: {fileID: 0}
   hpBar: {fileID: 6255235157913657608}
+--- !u!114 &6390632650937503290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8702272059430680562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9581b17099b98c40bd88b5e77f47527, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  states:
+  - {fileID: 11400000, guid: 228b05bc8fd31064dbb9c9b9b6a2a7eb, type: 2}
+  - {fileID: 11400000, guid: 33c6c26435426f94fb33b62dbc0d7d22, type: 2}
+  - {fileID: 11400000, guid: f643e0adcb448444497693ba91d86bf2, type: 2}
+  - {fileID: 11400000, guid: 9b2d24c15dc4b0540b8b7a489168bf69, type: 2}
+  enemy: {fileID: 0}
+  initialState: 0
+  currentState: {fileID: 0}
 --- !u!1 &8702272059444898612
 GameObject:
   m_ObjectHideFlags: 0
