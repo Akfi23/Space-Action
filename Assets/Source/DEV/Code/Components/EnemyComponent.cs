@@ -1,8 +1,7 @@
-using Kuhpik;
+using Cysharp.Threading.Tasks;
 using NaughtyAttributes;
 using Supyrb;
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class EnemyComponent : CharacterComponent
@@ -40,16 +39,16 @@ public class EnemyComponent : CharacterComponent
         TakeDamageByPlayer(bullet.transform.position,bullet);
     }
 
-    private void TakeDamageByPlayer(Vector3 hitPos,BulletComponent bullet)
+    private async void TakeDamageByPlayer(Vector3 hitPos,BulletComponent bullet)
     {
-        if (fsmComponent.GetState() == StateType.Attack)
-            animator.SetEnemyAttack(false);
+        //if (fsmComponent.GetState() == StateType.Attack)
+        //    animator.SetEnemyAttack(false);
 
         TakeDamage();
         fx.SetHitPosition(hitPos);
-        StartCoroutine(HPBarRoutine());
-        StartCoroutine(HitEffectRoutine());
         bullet.gameObject.SetActive(false);
+        await ShowHpBar().ToCoroutine();
+        await ShowHitEffect();
     }
 
     public override void Die()
@@ -67,24 +66,25 @@ public class EnemyComponent : CharacterComponent
         hitSignal.Dispatch();
     }
 
-    private IEnumerator HitEffectRoutine()
+    private async UniTask ShowHitEffect()
     {
         Color baseColor = Outline.FrontParameters.FillPass.GetColor(HitHash);
         Outline.FrontParameters.FillPass.SetColor(HitHash, Color.white);
-        yield return new WaitForSeconds(0.1f);
+        await UniTask.Delay(TimeSpan.FromSeconds(0.05f), ignoreTimeScale: false);
         Outline.FrontParameters.FillPass.SetColor(HitHash, baseColor);
     }
 
-    IEnumerator HPBarRoutine()
+    private async UniTask ShowHpBar()
     {
         characterHUD.HUD.gameObject.SetActive(true);
         characterHUD.HPBar.fillAmount = 1f / maxHealth * currentHealth;
 
         float t = Time.time;
+
         while (Time.time < t + 0.45f)
         {
             characterHUD.HUD.transform.localRotation = Quaternion.Euler(-transform.localRotation.eulerAngles);
-            yield return null;
+            await UniTask.Yield();
         }
 
         characterHUD.HUD.gameObject.SetActive(false);

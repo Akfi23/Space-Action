@@ -10,6 +10,8 @@ public class AttackState : CharacterState
         enemy.Agent.ResetPath();
         enemy.Animator.SetEnemyRun(false);
         enemy.Animator.SetEnemyAttack(true);
+
+        Debug.Log(this.name);
     }
 
     public override void OnStateExit(EnemyComponent enemy)
@@ -18,7 +20,9 @@ public class AttackState : CharacterState
 
     public override void Work(EnemyComponent enemy)
     {
-        if (Vector3.Distance(gamedata.Player.transform.position, enemy.transform.position) > 2)
+        Debug.Log(Vector3.Distance(gamedata.Player.transform.position, enemy.transform.position));
+
+        if (Vector3.Distance(gamedata.Player.transform.position, enemy.transform.position) > 3)
             enemy.FSM.SetState(StateType.Chase);
 
         if (Vector3.Distance(gamedata.Player.transform.position, enemy.transform.position) > 5)

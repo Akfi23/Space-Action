@@ -7,8 +7,11 @@ public class GoBackState : CharacterState
 {
     public override void OnStateEnter(EnemyComponent enemy)
     {
-        enemy.Agent.SetDestination(enemy.BornPos);
+        enemy.Animator.SetEnemyAttack(false);
         enemy.Animator.SetEnemyRun(true);
+        enemy.Agent.SetDestination(enemy.BornPos);
+
+        Debug.Log(this.name);
     }
 
     public override void OnStateExit(EnemyComponent enemy)

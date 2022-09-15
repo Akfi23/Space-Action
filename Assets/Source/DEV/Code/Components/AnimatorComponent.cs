@@ -44,7 +44,7 @@ public class AnimatorComponent : MonoBehaviour
 
     public void SetEnemyAttack(bool status)
     {
-        animator.SetBool(EnemyAttackHash,status);
+        animator.SetTrigger(EnemyAttackHash);
     }   
 
     public void SetEnemyRun(bool status)

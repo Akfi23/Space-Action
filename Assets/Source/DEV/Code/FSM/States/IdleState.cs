@@ -7,7 +7,6 @@ public class IdleState : CharacterState
 {
     public override void OnStateEnter(EnemyComponent enemy)
     {
-        enemy.Animator.SetEnemyAttack(false);
         enemy.Animator.SetEnemyRun(false);
         enemy.Agent.ResetPath();
     }

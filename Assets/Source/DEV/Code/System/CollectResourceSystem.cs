@@ -1,13 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using Kuhpik;
 using Supyrb;
-using DG.Tweening;
-using UniRx;
 using System;
-using System.Threading;
-using NaughtyAttributes;
+using System.Collections.Generic;
+using UniRx;
+using UnityEngine;
 
 public class CollectResourceSystem : GameSystemWithScreen<GameScreen>
 {
@@ -33,13 +31,14 @@ public class CollectResourceSystem : GameSystemWithScreen<GameScreen>
         FindAvailableResources();
     }
 
-    private void StartCollectRoutine(ResourceObjectComponent resource)
+    private async void StartCollectRoutine(ResourceObjectComponent resource)
     {
-        StartCoroutine(CollectResourceByHit(resource));
-        StartCoroutine(ShakingRoutine(resource));
+        await CollectResourceByHit(resource);
+        await ShakeResource(resource);
+        //StartCoroutine(ShakingRoutine(resource));
     }
 
-    private IEnumerator CollectResourceByHit(ResourceObjectComponent resource)
+    private async UniTask CollectResourceByHit(ResourceObjectComponent resource)
     {
         if (resource.HitCounter < resource.GetModelsCount())
         {
@@ -51,15 +50,15 @@ public class CollectResourceSystem : GameSystemWithScreen<GameScreen>
             ThrowResourceToPlayer(resource);
         }
 
-        yield return new WaitForSeconds(0.1f);
+        await UniTask.Delay(TimeSpan.FromSeconds(0.1f));
 
         if (resource.HitCounter == resource.GetModelsCount())
         {
-            StartCoroutine(RespawnRoutine(resource));
+            await StartRespawnWithDelay(resource);
         }
     }
 
-    private IEnumerator ShakingRoutine(ResourceObjectComponent resource)
+    private async UniTask ShakeResource(ResourceObjectComponent resource)
     {
         Vector3 RandomVec;
 
@@ -68,22 +67,21 @@ public class CollectResourceSystem : GameSystemWithScreen<GameScreen>
             RandomVec = FastExtensions.RandomVector3(-1, 1, 0, 0, -1, 1).normalized * interactingMagnitude * i;
             RandomVec.y = resource.transform.eulerAngles.y;
             resource.transform.DORotate(RandomVec, 0.1f);
-            yield return new WaitForSeconds(0.1f);
+            await UniTask.Delay(TimeSpan.FromSeconds(0.1f));
         }
     }
 
-    private IEnumerator RespawnRoutine(ResourceObjectComponent resource)
+    private async UniTask StartRespawnWithDelay(ResourceObjectComponent resource)
     {
         if (resources.Contains(resource))
         {
-            Debug.Log(resource.Type);
             resources.Remove(resource);
         }
 
         FindAvailableResources();
 
         resource.SwitchObjectActiveStatus(false);
-        yield return new WaitForSeconds(config.ResourceRespawnTime);
+        await UniTask.Delay(TimeSpan.FromSeconds(config.ResourceRespawnTime));
         resource.RenewHitCount();
         resource.SwitchObjectActiveStatus(true);
         resource.transform.localScale = Vector3.one * 0.15f;

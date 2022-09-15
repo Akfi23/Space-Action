@@ -9,6 +9,8 @@ public class ChaseState : CharacterState
     {
         enemy.Animator.SetEnemyAttack(false);
         enemy.Animator.SetEnemyRun(true);
+
+        Debug.Log(this.name);
     }
 
     public override void OnStateExit(EnemyComponent enemy)
@@ -19,7 +21,7 @@ public class ChaseState : CharacterState
     {
         enemy.Agent.SetDestination(gamedata.Player.transform.position);
 
-        if (Vector3.Distance(gamedata.Player.transform.position, enemy.transform.position) < 1)
+        if (Vector3.Distance(gamedata.Player.transform.position, enemy.transform.position) < 2)
             enemy.FSM.SetState(StateType.Attack);
 
         if (Vector3.Distance(gamedata.Player.transform.position, enemy.transform.position) > 8)
