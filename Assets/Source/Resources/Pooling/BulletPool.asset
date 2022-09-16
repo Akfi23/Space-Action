@@ -15,6 +15,6 @@ MonoBehaviour:
   poolName: Bullet
   capacity: 15
   poolTime: 5
-  dontDestroy: 0
+  dontDestroy: 1
   prefab: {fileID: 1259124777575435325, guid: c7b65df857406e34a89e2c6abe6cbfbb, type: 3}
   cachedComponents: []

@@ -4,6 +4,7 @@ using Supyrb;
 using System;
 using UnityEngine;
 
+
 public class EnemyComponent : CharacterComponent
 {
     private int HitHash = Shader.PropertyToID("_PublicColor");
@@ -70,7 +71,7 @@ public class EnemyComponent : CharacterComponent
     {
         Color baseColor = Outline.FrontParameters.FillPass.GetColor(HitHash);
         Outline.FrontParameters.FillPass.SetColor(HitHash, Color.white);
-        await UniTask.Delay(TimeSpan.FromSeconds(0.05f), ignoreTimeScale: false);
+        await UniTask.Delay(TimeSpan.FromSeconds(0.035f), ignoreTimeScale: true);
         Outline.FrontParameters.FillPass.SetColor(HitHash, baseColor);
     }
 

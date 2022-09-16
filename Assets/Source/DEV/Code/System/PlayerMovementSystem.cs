@@ -10,6 +10,9 @@ public class PlayerMovementSystem : GameSystem
     private Vector3 previousPosition;
     private float moveLerpedValue;
     private float sideLerpedValue;
+    private Vector3 _lerpedSpeed;
+    private Vector3 _perFrameOffset;
+    private Vector3 _prevFramePosition;
 
     [SerializeField] private float lerpIn;
     [SerializeField] private float lerpOut;
@@ -17,17 +20,24 @@ public class PlayerMovementSystem : GameSystem
     public override void OnInit()
     {
         game.Player.Animator.SetMoveSpeedAnimator(0);
-
+        _prevFramePosition = game.Player.transform.position;
     }
 
     public override void OnUpdate()
     {
+        if (!game.Player.Agent.enabled) return;
+
         MovePlayerByJoystick();
+    }
+
+    public override void OnLateUpdate()
+    {
+        UpdateAnimatorByDirection();
     }
 
     public void MovePlayerByJoystick()
     {
-        if (!game.Player.Agent.enabled) return;
+        Debug.Log(game.Joystick.Direction);
 
         direction = new Vector3(game.Joystick.Direction.x, 0, game.Joystick.Direction.y);
         direction = Quaternion.Euler(0, cameraController.GameCamera.transform.eulerAngles.y, 0) * direction;
@@ -35,7 +45,8 @@ public class PlayerMovementSystem : GameSystem
         if (direction.sqrMagnitude > 0)
         {
             game.isPlayerMoving = true;
-            game.Player.transform.forward = Vector3.Slerp(game.Player.transform.forward, direction, lerpIn * Time.deltaTime);
+            if(!game.isAttack)
+                game.Player.transform.forward = Vector3.Slerp(game.Player.transform.forward, direction, lerpIn * Time.deltaTime);
         }
         else
         {
@@ -46,11 +57,32 @@ public class PlayerMovementSystem : GameSystem
         game.Player.Agent.Move(direction * config.PlayerMoveSpeed * Time.deltaTime);
 
         moveLerpedValue = Mathf.Lerp(moveLerpedValue, Velocity().magnitude / config.PlayerMoveSpeed, 5 * Time.deltaTime);
-        game.Player.Animator.SetMoveSpeedAnimator(moveLerpedValue);
-
         previousPosition = game.Player.transform.position;
 
         UpdateCircleRotation();
+    }
+
+    private void UpdateAnimatorByDirection()
+    {
+        _perFrameOffset = (game.Player.transform.position - _prevFramePosition) / Time.deltaTime / 7.5f;
+        _perFrameOffset =
+            Quaternion.Euler(0, Vector3.SignedAngle(game.Player.transform.forward, Vector3.forward, Vector3.up), 0) *
+            _perFrameOffset;
+
+        _lerpedSpeed = Vector3.Lerp(_lerpedSpeed, _perFrameOffset, 10 * Time.deltaTime);
+
+        _prevFramePosition = game.Player.transform.position;
+
+        if (game.isAttack)
+        {
+            game.Player.Animator.SetSideOffsetAnimator(_lerpedSpeed.x);
+            game.Player.Animator.SetMoveSpeedAnimator(_lerpedSpeed.z);
+        }
+        else
+        {
+            game.Player.Animator.SetSideOffsetAnimator(0);
+            game.Player.Animator.SetMoveSpeedAnimator(moveLerpedValue);
+        }
     }
 
     private Vector3 Velocity()
@@ -61,7 +93,7 @@ public class PlayerMovementSystem : GameSystem
     private float CheckSide()
     {
         var angle = Vector3.SignedAngle(game.Player.transform.forward, direction, Vector3.up);
-        return angle / 90;
+        return angle / 25;
     }
 
     private void UpdateCircleRotation()

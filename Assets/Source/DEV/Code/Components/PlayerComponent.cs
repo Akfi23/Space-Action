@@ -36,4 +36,11 @@ public class PlayerComponent : CharacterComponent
         toolHolder = GetComponent<ToolHolderComponent>();
         toolHolder.InitToolHolderComponent();
     }
+
+    new public int TakeDamage()
+    {
+        base.TakeDamage();
+
+        return currentHealth;
+    }
 }

@@ -1,21 +1,17 @@
+using Kuhpik;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Akfi
 {
-    public class LoseScreen : MonoBehaviour
+    public class LoseScreen : UIScreen
     {
-        // Start is called before the first frame update
-        void Start()
-        {
-        
-        }
+        [SerializeField] private Image losePanel;
+        [SerializeField] private Button restartButton;
 
-        // Update is called once per frame
-        void Update()
-        {
-        
-        }
+        public Image LosePanel => losePanel;
+        public Button RestartButton => restartButton;
     }
 }

@@ -9,7 +9,7 @@ using System;
 namespace Kuhpik
 {
     [Serializable]
-    public class CameraController : MonoBehaviour
+    public class CameraController /*: MonoBehaviour*/
     {
         public CinemachineVirtualCamera GameCamera { get; set; }
         public CinemachineVirtualCamera CombatCamera { get; set; }

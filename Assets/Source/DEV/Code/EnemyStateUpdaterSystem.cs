@@ -12,4 +12,13 @@ public class EnemyStateUpdaterSystem : GameSystem
             enemy.FSM.Work();
         }
     }
+
+    public override void OnStateExit()
+    {
+        foreach (var enemy in game.Enemies)
+        {
+            if(enemy.CurrentHealth>0)
+                enemy.FSM.SetState(StateType.GoBack);
+        }
+    }
 }

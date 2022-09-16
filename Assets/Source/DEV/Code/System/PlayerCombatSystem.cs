@@ -34,6 +34,7 @@ public class PlayerCombatSystem : GameSystem
         Aim();
     }
 
+
     private void PrepareBullets()
     {
         int poolCapacity = PoolInstaller.Instance.GetPool("Bullet").Capacity;
@@ -48,11 +49,6 @@ public class PlayerCombatSystem : GameSystem
         {
             bullet.SetActive(false);
         }
-    }
-
-    public override void OnGameEnd()
-    {
-        PoolingSystem.Clear();
     }
 
     private void TryToShoot()
@@ -80,13 +76,19 @@ public class PlayerCombatSystem : GameSystem
     {
         game.Player.RigComponent.ArmTarget.position = target.transform.position + Vector3.up * 1.3f;
         game.Player.RigComponent.BodyTarget.position = target.transform.position + Vector3.up * 2f;
+
         Quaternion rot = Quaternion.LookRotation(game.Player.RigComponent.ArmTarget.position - gun.transform.position);
         gun.rotation = rot;
+
+        Quaternion lookRotation = Quaternion.LookRotation(target.transform.position - game.Player.transform.position);
+        game.Player.transform.rotation = Quaternion.Lerp(game.Player.transform.rotation,lookRotation,5*Time.deltaTime);
     }
 
     private void ManageEnemyList(Transform enemy, bool status)
     {
         if (!enemy.TryGetComponent(out EnemyComponent enemyComponent)) return;
+
+        enemyComponent.FSM.SetState(StateType.Chase);
 
         if (status)
         {
@@ -112,14 +114,11 @@ public class PlayerCombatSystem : GameSystem
 
     private void TryAttackEnemy()
     {
-        counter = 0;
-
         if (game.EnemiesInArea.Count > 0)
         {
             if (game.EnemiesInArea[0].CurrentHealth > 0)
             {
                 target = game.EnemiesInArea[0];
-                target.FSM.SetState(StateType.Chase);
                 AttachMarkerToTarget();
                 StartShooting();
             }

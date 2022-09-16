@@ -10,6 +10,7 @@ public class AnimatorComponent : MonoBehaviour
 
     
     private int MoveSpeedHash = Animator.StringToHash("MoveSpeed");
+    private int SideOffsetHash = Animator.StringToHash("SideOffset");
     private int FlyHash = Animator.StringToHash("IsFlying");
     private int DieHash = Animator.StringToHash("IsDie");
 
@@ -29,7 +30,7 @@ public class AnimatorComponent : MonoBehaviour
 
     public void SetSideOffsetAnimator(float offset)
     {
-        //animator.SetFloat(SideOffsetHash, offset);
+        animator.SetFloat(SideOffsetHash, offset);
     }
 
     public void SetFlyAnimStatus(bool status)
