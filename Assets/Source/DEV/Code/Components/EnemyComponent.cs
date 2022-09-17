@@ -8,11 +8,10 @@ using UnityEngine;
 public class EnemyComponent : CharacterComponent
 {
     private int HitHash = Shader.PropertyToID("_PublicColor");
-    private OnEnemyDie dieSignal;
-    private CharacterHUDComponent characterHUD;
+    private OnEnemyHit hitSignal;
     private EnemyFSMComponent fsmComponent;
     private Vector3 bornPos;
-    private HitOnPlayerSignal hitSignal;
+    private HitOnPlayerSignal attackSignal;
 
     public EnemyFSMComponent FSM => fsmComponent;
     public Vector3 BornPos => bornPos;
@@ -24,12 +23,8 @@ public class EnemyComponent : CharacterComponent
 
         bornPos = transform.position;
 
-        dieSignal = Signals.Get<OnEnemyDie>();
-        hitSignal = Signals.Get<HitOnPlayerSignal>();
-
-        characterHUD = GetComponentInChildren<CharacterHUDComponent>();
-        characterHUD.InitHUD();
-
+        hitSignal = Signals.Get<OnEnemyHit>();
+        attackSignal = Signals.Get<HitOnPlayerSignal>();
         fsmComponent = GetComponent<EnemyFSMComponent>();
     }
 
@@ -48,15 +43,14 @@ public class EnemyComponent : CharacterComponent
         TakeDamage();
         fx.SetHitPosition(hitPos);
         bullet.gameObject.SetActive(false);
-        await ShowHpBar().ToCoroutine();
         await ShowHitEffect();
+        hitSignal.Dispatch(this);
     }
 
     public override void Die()
     {
         base.Die();
         col.enabled = false;
-        dieSignal.Dispatch(this);
         fx.LandingFX.Play();
         fsmComponent.SetState(StateType.Idle);
         agent.ResetPath();
@@ -64,7 +58,7 @@ public class EnemyComponent : CharacterComponent
 
     public void PlayerAttackSignal()
     {
-        hitSignal.Dispatch();
+        attackSignal.Dispatch();
     }
 
     private async UniTask ShowHitEffect()
@@ -73,21 +67,5 @@ public class EnemyComponent : CharacterComponent
         Outline.FrontParameters.FillPass.SetColor(HitHash, Color.white);
         await UniTask.Delay(TimeSpan.FromSeconds(0.035f), ignoreTimeScale: true);
         Outline.FrontParameters.FillPass.SetColor(HitHash, baseColor);
-    }
-
-    private async UniTask ShowHpBar()
-    {
-        characterHUD.HUD.gameObject.SetActive(true);
-        characterHUD.HPBar.fillAmount = 1f / maxHealth * currentHealth;
-
-        float t = Time.time;
-
-        while (Time.time < t + 0.45f)
-        {
-            characterHUD.HUD.transform.localRotation = Quaternion.Euler(-transform.localRotation.eulerAngles);
-            await UniTask.Yield();
-        }
-
-        characterHUD.HUD.gameObject.SetActive(false);
-    }
+    }   
 }

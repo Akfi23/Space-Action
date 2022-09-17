@@ -11,7 +11,7 @@ public class CompanionBehaviourSystem : GameSystem
     public override void OnInit()
     {
         Signals.Get<OnTriggerCollide>().AddListener(ManageEnemyList);
-        Signals.Get<OnEnemyDie>().AddListener(FindNextTargetAfterKill);
+        Signals.Get<OnEnemyHit>().AddListener(FindNextTargetAfterKill);
 
         target = game.Player.transform;
     }

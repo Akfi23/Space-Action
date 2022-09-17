@@ -7,11 +7,15 @@ namespace Kuhpik
 {
     public class UIManager : MonoBehaviour
     {
-        static Dictionary<Type, UIScreen> uiScreensByType;
-        static UIScreen[] uiScreens;
+        private static Dictionary<Type, UIScreen> uiScreensByType;
+        private static UIScreen[] uiScreens;
+        private static Canvas canvas;
+
+        public static Canvas Canvas => canvas;
 
         void Start()
         {
+            canvas = GetComponent<Canvas>();
             uiScreens = FindObjectsOfType<UIScreen>();
             uiScreensByType = uiScreens.Where(x => x.GetType() != typeof(UIScreen)).ToDictionary(x => x.GetType(), x => x);
 

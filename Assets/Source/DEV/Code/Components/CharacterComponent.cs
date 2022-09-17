@@ -20,6 +20,7 @@ public class CharacterComponent : MonoBehaviour
     public FXHolderComponent FX => fx;
     public Outlinable Outline => outlinableComponent;
     public int CurrentHealth => currentHealth;
+    public int MaxHealth => maxHealth;
     public Collider Collider => col;
 
     public virtual void Init()

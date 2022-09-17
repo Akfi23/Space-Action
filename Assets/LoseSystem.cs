@@ -1,8 +1,5 @@
 using DG.Tweening;
 using Kuhpik;
-using Kuhpik.Pooling;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Akfi
@@ -11,15 +8,19 @@ namespace Akfi
     {
         public override void OnInit()
         {
-            screen.LosePanel.DOFade(0.65f, 1f);
+            screen.Panel.DOFade(0.65f, 0.5f);
+            screen.Label.transform.DOScale(Vector3.one, 0.5f).SetDelay(0.4f);
+            screen.Text.transform.DOPunchRotation(Vector3.forward * 30, 0.5f).SetDelay(0.4f);
             screen.RestartButton.onClick.AddListener(RestartGame);
         }
 
         private void RestartGame()
         {
-            screen.LosePanel.DOKill();
+            screen.Panel.DOKill();
+            screen.Text.DOKill();
+            screen.Label.DOKill();
+
             screen.RestartButton.interactable = false;
-            //PoolingSystem.Clear();
             Bootstrap.Instance.GameRestart(0);
         }
     }

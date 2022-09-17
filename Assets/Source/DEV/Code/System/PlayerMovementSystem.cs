@@ -37,8 +37,6 @@ public class PlayerMovementSystem : GameSystem
 
     public void MovePlayerByJoystick()
     {
-        Debug.Log(game.Joystick.Direction);
-
         direction = new Vector3(game.Joystick.Direction.x, 0, game.Joystick.Direction.y);
         direction = Quaternion.Euler(0, cameraController.GameCamera.transform.eulerAngles.y, 0) * direction;
 
@@ -64,17 +62,19 @@ public class PlayerMovementSystem : GameSystem
 
     private void UpdateAnimatorByDirection()
     {
-        _perFrameOffset = (game.Player.transform.position - _prevFramePosition) / Time.deltaTime / 7.5f;
-        _perFrameOffset =
-            Quaternion.Euler(0, Vector3.SignedAngle(game.Player.transform.forward, Vector3.forward, Vector3.up), 0) *
-            _perFrameOffset;
-
-        _lerpedSpeed = Vector3.Lerp(_lerpedSpeed, _perFrameOffset, 10 * Time.deltaTime);
-
-        _prevFramePosition = game.Player.transform.position;
 
         if (game.isAttack)
         {
+            _perFrameOffset = (game.Player.transform.position - _prevFramePosition) / Time.deltaTime / 7.5f;
+            _perFrameOffset =
+                Quaternion.Euler(0, Vector3.SignedAngle(game.Player.transform.forward, Vector3.forward, Vector3.up), 0) *
+                _perFrameOffset;
+
+            _lerpedSpeed = Vector3.Lerp(_lerpedSpeed, _perFrameOffset, 10 * Time.deltaTime);
+
+            _prevFramePosition = game.Player.transform.position;
+
+            Debug.Log(_lerpedSpeed.x);
             game.Player.Animator.SetSideOffsetAnimator(_lerpedSpeed.x);
             game.Player.Animator.SetMoveSpeedAnimator(_lerpedSpeed.z);
         }

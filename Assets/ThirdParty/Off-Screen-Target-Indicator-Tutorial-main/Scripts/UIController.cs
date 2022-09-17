@@ -31,11 +31,11 @@ public class UIController : MonoBehaviour
         }
     }
 
-    public void AddTargetIndicator(GameObject target)
-    {
-        TargetIndicator indicator = GameObject.Instantiate(TargetIndicatorPrefab, canvas.transform).GetComponent<TargetIndicator>();
-        indicator.InitialiseTargetIndicator(target, MainCamera, canvas);
-        targetIndicators.Add(indicator);
-    }
+    //public void AddTargetIndicator(GameObject target)
+    //{
+    //    TargetIndicator indicator = GameObject.Instantiate(TargetIndicatorPrefab, canvas.transform).GetComponent<TargetIndicator>();
+    //    indicator.InitialiseTargetIndicator(target, MainCamera, canvas);
+    //    targetIndicators.Add(indicator);
+    //}
 
 }

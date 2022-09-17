@@ -7,7 +7,12 @@ public class TargetIndicator : MonoBehaviour
 {
     public Image TargetIndicatorImage;
     public Image OffScreenTargetIndicator;
+    public Image CurrentHP;
+    public Image FakeHP;
     public float OutOfSightOffset = 20f;
+    public float yPos;
+    public bool isRotate = true;
+    public bool isHealth = true;
     private float outOfSightOffest { get { return OutOfSightOffset /* canvasRect.localScale.x*/; } }
 
     private GameObject target;
@@ -21,12 +26,16 @@ public class TargetIndicator : MonoBehaviour
         rectTransform = GetComponent<RectTransform>();
     }
 
-
-    public void InitialiseTargetIndicator(GameObject target, Camera mainCamera, Canvas canvas)
+    public void InitialiseTargetIndicator(Camera mainCamera, Canvas canvas,GameObject target = null)
     {
         this.target = target;
         this.mainCamera = mainCamera;
         canvasRect = canvas.GetComponent<RectTransform>();
+    }
+
+    public void UpdateTarget(GameObject target)
+    {
+        this.target = target;
     }
 
     public void UpdateTargetIndicator()
@@ -43,7 +52,7 @@ public class TargetIndicator : MonoBehaviour
     {
 
         //Get the position of the target in relation to the screenSpace 
-        Vector3 indicatorPosition = mainCamera.WorldToScreenPoint(target.transform.position);
+        Vector3 indicatorPosition = mainCamera.WorldToScreenPoint(target.transform.position+Vector3.up*yPos);
         //Debug.Log("GO: "+ gameObject.name + "; slPos: " + indicatorPosition + "; cvWidt: " + canvasRect.rect.width + "; cvHeight: " + canvasRect.rect.height);
 
         //In case the target is both in front of the camera and within the bounds of its frustrum
@@ -126,10 +135,21 @@ public class TargetIndicator : MonoBehaviour
         {
             //Activate and Deactivate some stuff
             if (OffScreenTargetIndicator.gameObject.activeSelf == false) OffScreenTargetIndicator.gameObject.SetActive(true);
-            if (TargetIndicatorImage.isActiveAndEnabled == true) TargetIndicatorImage.enabled = false;
+
+            if (TargetIndicatorImage.isActiveAndEnabled == true)
+            {   
+                TargetIndicatorImage.enabled = false;
+
+                if (isHealth)
+                {
+                    CurrentHP.enabled = false;
+                    FakeHP.enabled = false;
+                }
+            }
 
             //Set the rotation of the OutOfSight direction indicator
-            OffScreenTargetIndicator.rectTransform.rotation = Quaternion.Euler(rotationOutOfSightTargetindicator(indicatorPosition));
+            if(isRotate)
+                OffScreenTargetIndicator.rectTransform.rotation = Quaternion.Euler(rotationOutOfSightTargetindicator(indicatorPosition));
 
             //outOfSightArrow.rectTransform.rotation  = Quaternion.LookRotation(indicatorPosition- new Vector3(canvasRect.rect.width/2f,canvasRect.rect.height/2f,0f)) ;
             /*outOfSightArrow.rectTransform.rotation = Quaternion.LookRotation(indicatorPosition);
@@ -143,7 +163,16 @@ public class TargetIndicator : MonoBehaviour
         else
         {
             if (OffScreenTargetIndicator.gameObject.activeSelf == true) OffScreenTargetIndicator.gameObject.SetActive(false);
-            if (TargetIndicatorImage.isActiveAndEnabled == false) TargetIndicatorImage.enabled = true;
+
+            if (TargetIndicatorImage.isActiveAndEnabled == false)
+            {
+                TargetIndicatorImage.enabled = true;
+                if (isHealth)
+                {
+                    CurrentHP.enabled = true;
+                    FakeHP.enabled = true;
+                }
+            }
         }
     }
 

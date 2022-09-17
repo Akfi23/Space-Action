@@ -339,30 +339,30 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 7a37cdf73a257644ea1839d623d1fb4e, type: 2}
     m_Threshold: 1.4
     m_Position: {x: -0.25, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: MoveSpeed
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: 16e65ec667f3769469e4b9cebfbf45e9, type: 2}
+    m_Threshold: 2.5999997
+    m_Position: {x: 0, y: -0.15}
     m_TimeScale: 2
     m_CycleOffset: 0
     m_DirectBlendParameter: MoveSpeed
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: fbb5a8711c54be549b2581efe44f7edd, type: 2}
-    m_Threshold: 1.8
-    m_Position: {x: 0, y: -0.1}
-    m_TimeScale: 3
-    m_CycleOffset: 0
-    m_DirectBlendParameter: MoveSpeed
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: eb251780e4374b9489abb5144cdfc8d9, type: 2}
-    m_Threshold: 2.1999998
-    m_Position: {x: 0, y: 0.1}
-    m_TimeScale: 3
+    m_Motion: {fileID: 7400000, guid: 02434f46e49dd584aaae47fd6f0165b7, type: 2}
+    m_Threshold: 2.9999995
+    m_Position: {x: 0, y: 0.15}
+    m_TimeScale: 2
     m_CycleOffset: 0
     m_DirectBlendParameter: MoveSpeed
     m_Mirror: 0
   m_BlendParameter: MoveSpeed
   m_BlendParameterY: SideOffset
   m_MinThreshold: 0
-  m_MaxThreshold: 2.1999998
+  m_MaxThreshold: 2.9999995
   m_UseAutomaticThresholds: 0
   m_NormalizedBlendValues: 0
   m_BlendType: 2

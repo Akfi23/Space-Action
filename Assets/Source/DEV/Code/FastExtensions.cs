@@ -1,4 +1,5 @@
 using DG.Tweening;
+using Kuhpik;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -228,6 +229,18 @@ public static class FastExtensions : object
 
     #region Coroutine
     public static void StartRoutine(this MonoBehaviour behaviour,IEnumerator cachedRoutine, IEnumerator targetRoutine)
+    {
+        if (cachedRoutine != null)
+        {
+            behaviour.StopCoroutine(cachedRoutine);
+        }
+
+        cachedRoutine = targetRoutine;
+
+        behaviour.StartCoroutine(cachedRoutine);
+    }
+
+    public static void StartRoutine(this GameSystem behaviour, IEnumerator cachedRoutine, IEnumerator targetRoutine)
     {
         if (cachedRoutine != null)
         {

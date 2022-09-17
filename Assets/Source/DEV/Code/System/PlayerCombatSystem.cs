@@ -21,7 +21,7 @@ public class PlayerCombatSystem : GameSystem
         gun = game.Player.ToolHolder.GunHolder;
         shootPoint = game.Player.ToolHolder.ShootPoint;
         Signals.Get<OnEnemyInArea>().AddListener(ManageEnemyList);
-        Signals.Get<OnEnemyDie>().AddListener(FindNextTargetAfterKill);
+        Signals.Get<OnEnemyHit>().AddListener(FindNextTargetAfterKill);
     }
 
     public override void OnUpdate()
@@ -132,6 +132,7 @@ public class PlayerCombatSystem : GameSystem
 
     private void FindNextTargetAfterKill(EnemyComponent enemy)
     {
+        if (enemy.CurrentHealth > 0) return;
         RemoveEnemyFromList(enemy);
         TryAttackEnemy();
     }
