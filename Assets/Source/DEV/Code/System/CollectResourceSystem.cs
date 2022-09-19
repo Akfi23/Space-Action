@@ -83,7 +83,7 @@ public class CollectResourceSystem : GameSystemWithScreen<GameScreen>
         resource.RenewHitCount();
         resource.SwitchObjectActiveStatus(true);
         resource.transform.localScale = Vector3.one * 0.15f;
-        resource.transform.DOScale(Vector3.one * 0.333f, 0.25f);
+        resource.transform.DOScale(Vector3.one /** 0.333f*/, 0.25f);
     }
 
     private void ThrowResourceToPlayer(ResourceObjectComponent resource)

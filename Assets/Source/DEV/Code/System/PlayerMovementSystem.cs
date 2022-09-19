@@ -74,7 +74,6 @@ public class PlayerMovementSystem : GameSystem
 
             _prevFramePosition = game.Player.transform.position;
 
-            Debug.Log(_lerpedSpeed.x);
             game.Player.Animator.SetSideOffsetAnimator(_lerpedSpeed.x);
             game.Player.Animator.SetMoveSpeedAnimator(_lerpedSpeed.z);
         }
