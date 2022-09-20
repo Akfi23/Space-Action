@@ -22,7 +22,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Envir 1
   m_Shader: {fileID: 4800000, guid: e9c148fb071e7e8498af406988f2ccb7, type: 3}
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _RECEIVE_SHADOWS_OFF
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
@@ -110,9 +111,9 @@ Material:
     - _Parallax: 0.005
     - _QueueOffset: 0
     - _RampSmoothing: 1
-    - _RampThreshold: 0.01
+    - _RampThreshold: 0.132
     - _ReceiveShadows: 1
-    - _ReceiveShadowsOff: 1
+    - _ReceiveShadowsOff: 0
     - _RimMax: 1
     - _RimMin: 0.5
     - _Smoothness: 0.5

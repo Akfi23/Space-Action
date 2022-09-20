@@ -8,12 +8,10 @@ public class AnimatorComponent : MonoBehaviour
     private Animator animator;
     public Animator Animator => animator;
 
-    
     private int MoveSpeedHash = Animator.StringToHash("MoveSpeed");
     private int SideOffsetHash = Animator.StringToHash("SideOffset");
     private int FlyHash = Animator.StringToHash("IsFlying");
     private int DieHash = Animator.StringToHash("IsDie");
-
     private int EnemyRunHash=Animator.StringToHash("IsMove");
     private int EnemyAttackHash= Animator.StringToHash("IsAttack");
 
