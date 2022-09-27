@@ -7,6 +7,8 @@ using UnityEngine;
 
 public class EnemyComponent : CharacterComponent
 {
+    [SerializeField] private int damage;
+    [SerializeField] private int reward;
     private int HitHash = Shader.PropertyToID("_PublicColor");
     private OnEnemyHit hitSignal;
     private EnemyFSMComponent fsmComponent;
@@ -15,6 +17,8 @@ public class EnemyComponent : CharacterComponent
 
     public EnemyFSMComponent FSM => fsmComponent;
     public Vector3 BornPos => bornPos;
+    public int Damage => damage;
+    public int Reward => reward;
 
     [Button]
     public override void Init()
@@ -35,12 +39,12 @@ public class EnemyComponent : CharacterComponent
         TakeDamageByPlayer(bullet.transform.position,bullet);
     }
 
-    private async void TakeDamageByPlayer(Vector3 hitPos,BulletComponent bullet)
+    private async void TakeDamageByPlayer(Vector3 hitPos, BulletComponent bullet)
     {
         //if (fsmComponent.GetState() == StateType.Attack)
         //    animator.SetEnemyAttack(false);
 
-        TakeDamage();
+        TakeDamage(bullet.Damage);
         fx.SetHitPosition(hitPos);
         bullet.gameObject.SetActive(false);
         await ShowHitEffect();
@@ -58,7 +62,7 @@ public class EnemyComponent : CharacterComponent
 
     public void PlayerAttackSignal()
     {
-        attackSignal.Dispatch();
+        attackSignal.Dispatch(damage);
     }
 
     private async UniTask ShowHitEffect()

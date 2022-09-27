@@ -1,3 +1,4 @@
+using Akfi;
 using Kuhpik;
 using System.Collections;
 using System.Collections.Generic;
@@ -52,9 +53,9 @@ public class PlayerMovementSystem : GameSystem
             game.Player.transform.forward = Vector3.Slerp(game.Player.transform.forward, game.Player.transform.forward, lerpOut * Time.deltaTime);
         }
 
-        game.Player.Agent.Move(direction * config.PlayerMoveSpeed * Time.deltaTime);
+        game.Player.Agent.Move(direction * (config.PlayerConfig.MoveSpeedBase + player.PlayerUpgradeDatas[UpgradeType.MoveSpeed].UpgradeValue) * Time.deltaTime);
 
-        moveLerpedValue = Mathf.Lerp(moveLerpedValue, Velocity().magnitude / config.PlayerMoveSpeed, 5 * Time.deltaTime);
+        moveLerpedValue = Mathf.Lerp(moveLerpedValue, Velocity().magnitude / (config.PlayerConfig.MoveSpeedBase + player.PlayerUpgradeDatas[UpgradeType.MoveSpeed].UpgradeValue), 5 * Time.deltaTime);
         previousPosition = game.Player.transform.position;
 
         UpdateCircleRotation();

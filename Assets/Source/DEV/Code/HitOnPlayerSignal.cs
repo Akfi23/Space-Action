@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HitOnPlayerSignal : Signal
+public class HitOnPlayerSignal : Signal<int>
 {
     
 }

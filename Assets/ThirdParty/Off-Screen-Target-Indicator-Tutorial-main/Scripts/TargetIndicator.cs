@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,14 +12,14 @@ public class TargetIndicator : MonoBehaviour
     public Image FakeHP;
     public float OutOfSightOffset = 20f;
     public float yPos;
+    public TMP_Text DamageText;
     public bool isRotate = true;
     public bool isHealth = true;
-    private float outOfSightOffest { get { return OutOfSightOffset /* canvasRect.localScale.x*/; } }
 
+    private float outOfSightOffest { get { return OutOfSightOffset /* canvasRect.localScale.x*/; } }
     private GameObject target;
     private Camera mainCamera;
     private RectTransform canvasRect;
-
     private RectTransform rectTransform;
 
     private void Awake()
@@ -26,7 +27,7 @@ public class TargetIndicator : MonoBehaviour
         rectTransform = GetComponent<RectTransform>();
     }
 
-    public void InitialiseTargetIndicator(Camera mainCamera, Canvas canvas,GameObject target = null)
+    public void InitialiseTargetIndicator(Camera mainCamera, Canvas canvas, GameObject target = null)
     {
         this.target = target;
         this.mainCamera = mainCamera;
@@ -41,25 +42,18 @@ public class TargetIndicator : MonoBehaviour
     public void UpdateTargetIndicator()
     {
         SetIndicatorPosition();
-
-        //Adjust distance display
-        //Turn on or off when in range/out of range
-        //Do stuff if picked as main target
     }
-
 
     protected void SetIndicatorPosition()
     {
-
         //Get the position of the target in relation to the screenSpace 
-        Vector3 indicatorPosition = mainCamera.WorldToScreenPoint(target.transform.position+Vector3.up*yPos);
+        Vector3 indicatorPosition = mainCamera.WorldToScreenPoint(target.transform.position + Vector3.up * yPos);
         //Debug.Log("GO: "+ gameObject.name + "; slPos: " + indicatorPosition + "; cvWidt: " + canvasRect.rect.width + "; cvHeight: " + canvasRect.rect.height);
 
         //In case the target is both in front of the camera and within the bounds of its frustrum
         if (indicatorPosition.z >= 0f & indicatorPosition.x <= canvasRect.rect.width * canvasRect.localScale.x
          & indicatorPosition.y <= canvasRect.rect.height * canvasRect.localScale.x & indicatorPosition.x >= 0f & indicatorPosition.y >= 0f)
         {
-
             //Set z to zero since it's not needed and only causes issues (too far away from Camera to be shown!)
             indicatorPosition.z = 0f;
 
@@ -126,8 +120,6 @@ public class TargetIndicator : MonoBehaviour
         return indicatorPosition;
     }
 
-
-
     private void targetOutOfSight(bool oos, Vector3 indicatorPosition)
     {
         //In Case the indicator is OutOfSight
@@ -137,7 +129,7 @@ public class TargetIndicator : MonoBehaviour
             if (OffScreenTargetIndicator.gameObject.activeSelf == false) OffScreenTargetIndicator.gameObject.SetActive(true);
 
             if (TargetIndicatorImage.isActiveAndEnabled == true)
-            {   
+            {
                 TargetIndicatorImage.enabled = false;
 
                 if (isHealth)
@@ -148,7 +140,7 @@ public class TargetIndicator : MonoBehaviour
             }
 
             //Set the rotation of the OutOfSight direction indicator
-            if(isRotate)
+            if (isRotate)
                 OffScreenTargetIndicator.rectTransform.rotation = Quaternion.Euler(rotationOutOfSightTargetindicator(indicatorPosition));
 
             //outOfSightArrow.rectTransform.rotation  = Quaternion.LookRotation(indicatorPosition- new Vector3(canvasRect.rect.width/2f,canvasRect.rect.height/2f,0f)) ;
@@ -175,7 +167,6 @@ public class TargetIndicator : MonoBehaviour
             }
         }
     }
-
 
     private Vector3 rotationOutOfSightTargetindicator(Vector3 indicatorPosition)
     {

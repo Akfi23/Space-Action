@@ -1,5 +1,6 @@
 using UnityEngine;
 using NaughtyAttributes;
+using Akfi;
 
 namespace Kuhpik
 {
@@ -10,14 +11,14 @@ namespace Kuhpik
         // [SerializeField] [BoxGroup("Moving")] private float moveSpeed;
         // public float MoveSpeed => moveSpeed;
 
-        [SerializeField] private float playerMoveSpeed;
-        [SerializeField] [Range(3,30)] private int resourceRespawnTime;
-        [SerializeField] [Range(0.05f, 2f)] private float fireRate;
+        [SerializeField][Range(3, 30)] private int resourceRespawnTime;
+        [SerializeField][Range(0.05f, 2f)] private float fireRate;
         [SerializeField] private BulletComponent bulletPrefab;
+        [SerializeField] private PlayerValuesConfig playerConfig;
 
-        public float PlayerMoveSpeed => playerMoveSpeed;
         public int ResourceRespawnTime => resourceRespawnTime;
         public float FireRate => fireRate;
         public BulletComponent BulletPrefab => bulletPrefab;
+        public PlayerValuesConfig PlayerConfig => playerConfig;
     }
 }

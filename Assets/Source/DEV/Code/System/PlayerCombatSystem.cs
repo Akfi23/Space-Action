@@ -1,3 +1,4 @@
+using Akfi;
 using DG.Tweening;
 using Kuhpik;
 using Kuhpik.Pooling;
@@ -34,7 +35,6 @@ public class PlayerCombatSystem : GameSystem
         Aim();
     }
 
-
     private void PrepareBullets()
     {
         int poolCapacity = PoolInstaller.Instance.GetPool("Bullet").Capacity;
@@ -55,7 +55,7 @@ public class PlayerCombatSystem : GameSystem
     {
         counter += Time.deltaTime;
 
-        if (counter >= config.FireRate)
+        if (counter >= config.FireRate - player.PlayerUpgradeDatas[UpgradeType.AttackSpeed].UpgradeValue)
         {
             GetBullet();
             game.Player.FX.ShootEffect.Play();
@@ -69,6 +69,11 @@ public class PlayerCombatSystem : GameSystem
         projectile.transform.position = shootPoint.transform.position;
         projectile.transform.forward = gun.forward;
 
+        if (projectile.TryGetComponent(out BulletComponent bullet))
+        {
+            bullet.Damage = config.PlayerConfig.DamageBase + player.PlayerUpgradeDatas[UpgradeType.Damage].UpgradeValue;
+        }
+
         return projectile;
     }
 
@@ -81,7 +86,7 @@ public class PlayerCombatSystem : GameSystem
         gun.rotation = rot;
 
         Quaternion lookRotation = Quaternion.LookRotation(target.transform.position - game.Player.transform.position);
-        game.Player.transform.rotation = Quaternion.Lerp(game.Player.transform.rotation,lookRotation,5*Time.deltaTime);
+        game.Player.transform.rotation = Quaternion.Lerp(game.Player.transform.rotation, lookRotation, 5 * Time.deltaTime);
     }
 
     private void ManageEnemyList(Transform enemy, bool status)
@@ -97,6 +102,7 @@ public class PlayerCombatSystem : GameSystem
         else
         {
             RemoveEnemyFromList(enemyComponent);
+            enemyComponent.FSM.SetState(StateType.GoBack);
         }
 
         TryAttackEnemy();
@@ -162,7 +168,7 @@ public class PlayerCombatSystem : GameSystem
         {
             foreach (var bul in game.Bullets)
             {
-                if(bul.activeSelf)
+                if (bul.activeSelf)
                     bul.transform.position += bul.transform.forward * Time.deltaTime * 20;
             }
         }
@@ -180,5 +186,5 @@ public class PlayerCombatSystem : GameSystem
         targetMarker.SetParent(null);
         targetMarker.gameObject.SetActive(false);
     }
-        
+
 }

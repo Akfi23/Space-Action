@@ -6,8 +6,8 @@ using UnityEngine.AI;
 
 public class CharacterComponent : MonoBehaviour
 {
-    [SerializeField] protected int maxHealth;
-    [SerializeField] protected int currentHealth;
+    [SerializeField] protected float maxHealth;
+    [SerializeField] protected float currentHealth;
 
     protected NavMeshAgent agent;
     protected AnimatorComponent animator;
@@ -19,8 +19,8 @@ public class CharacterComponent : MonoBehaviour
     public AnimatorComponent Animator => animator;
     public FXHolderComponent FX => fx;
     public Outlinable Outline => outlinableComponent;
-    public int CurrentHealth => currentHealth;
-    public int MaxHealth => maxHealth;
+    public float CurrentHealth => currentHealth;
+    public float MaxHealth => maxHealth;
     public Collider Collider => col;
 
     public virtual void Init()
@@ -34,10 +34,10 @@ public class CharacterComponent : MonoBehaviour
         col = GetComponent<Collider>();
     }
 
-    public virtual void TakeDamage()
+    public virtual void TakeDamage(float damage)
     {
         if (currentHealth <= 0) return;
-        currentHealth--;
+        currentHealth-=damage;
 
         if (currentHealth <= 0)
             Die();

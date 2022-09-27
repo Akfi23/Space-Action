@@ -23,7 +23,6 @@ public class PlayerComponent : CharacterComponent
         base.Init();
 
         circle = GetComponentInChildren<Circle>();
-        circle.DrawCircle(7.5f);
 
         trigger = GetComponent<TriggerComponent>();
         trigger.InitTrigger();
@@ -37,10 +36,27 @@ public class PlayerComponent : CharacterComponent
         toolHolder.InitToolHolderComponent();
     }
 
-    new public int TakeDamage()
+    new public float TakeDamage(float damage)
     {
-        base.TakeDamage();
+        base.TakeDamage(damage);
 
         return currentHealth;
+    }
+
+    public void UpdateAttackRange(float radius)
+    {
+        enemyChecker.UpdateCollider(radius);
+        circle.DrawCircle(enemyChecker.EnemyCheckerColl.radius);
+    }
+
+    public void UpdateHealthValue(float value)
+    {
+        maxHealth += value;
+        currentHealth = maxHealth;
+    }
+
+    public void RegenHealth(float regenSpeed)
+    {
+        currentHealth = Mathf.Lerp(currentHealth, maxHealth, regenSpeed * Time.deltaTime);
     }
 }

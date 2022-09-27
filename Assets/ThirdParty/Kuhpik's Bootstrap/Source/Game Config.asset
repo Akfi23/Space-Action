@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a0bbf493a6018b41b94c2288283a11a, type: 3}
   m_Name: Game Config
   m_EditorClassIdentifier: 
-  playerMoveSpeed: 5
   resourceRespawnTime: 10
   fireRate: 0.5
   bulletPrefab: {fileID: 918589441171747163, guid: c7b65df857406e34a89e2c6abe6cbfbb,
     type: 3}
+  playerConfig: {fileID: 11400000, guid: 251e0c1bf7b31448f9def8d331f07e15, type: 2}
