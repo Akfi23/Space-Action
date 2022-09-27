@@ -62,8 +62,8 @@ public class CollectResourceSystem : GameSystemWithScreen<GameScreen>
         for (float i = 2.0f; i >= 0; i -= 0.5f)
         {
             RandomVec = FastExtensions.RandomVector3(-1, 1, 0, 0, -1, 1).normalized * interactingMagnitude * i;
-            RandomVec.y = resource.transform.eulerAngles.y;
-            resource.transform.DORotate(RandomVec, 0.1f);
+            RandomVec.y = resource.Root.eulerAngles.y;
+            resource.Root.DORotate(RandomVec, 0.1f);
             yield return new WaitForSeconds(0.1f);
         }
     }
