@@ -9,14 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ca330c3e313046838554b659758e231, type: 3}
-  m_Name: CritMultiplyer
+  m_Script: {fileID: 11500000, guid: a956141d78f24954b8a74aad7ae7d230, type: 3}
+  m_Name: CoinPool
   m_EditorClassIdentifier: 
-  Icon: {fileID: 21300000, guid: ad28fd7a4ec984437960ce8dbb203c70, type: 3}
-  Price: 300
-  UpgradeLevel: 0
-  UpgradeValue: 0
-  Owner: 0
-  Type: 6
-  PriceMultiplyer: 1.1
-  UpgradeMultiplyer: 1
+  poolName: CoinPool
+  capacity: 10
+  poolTime: 5
+  dontDestroy: 1
+  prefab: {fileID: 5933997875014648812, guid: af3cd4d0878c64317b085554dc18748c, type: 3}
+  cachedComponents: []

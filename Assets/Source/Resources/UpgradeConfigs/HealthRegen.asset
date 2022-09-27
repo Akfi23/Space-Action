@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ca330c3e313046838554b659758e231, type: 3}
   m_Name: HealthRegen
   m_EditorClassIdentifier: 
-  Icon: {fileID: 0}
-  Price: 0
+  Icon: {fileID: 21300000, guid: 0882cf9c9c13842c9a3aa4fb74800f83, type: 3}
+  Price: 100
   UpgradeLevel: 0
   UpgradeValue: 0
   Owner: 0
   Type: 4
-  PriceMultiplyer: 0
-  UpgradeMultiplyer: 0
+  PriceMultiplyer: 1.1
+  UpgradeMultiplyer: 0.1

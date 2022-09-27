@@ -1078,6 +1078,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 30
   currentHealth: 30
+  damage: 3
+  reward: 30
 --- !u!114 &5158775797138676111
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ca330c3e313046838554b659758e231, type: 3}
   m_Name: MoveSpeed
   m_EditorClassIdentifier: 
-  Icon: {fileID: 0}
-  Price: 0
+  Icon: {fileID: 21300000, guid: 44f2803dad0404cbeb9ee038d70da104, type: 3}
+  Price: 100
   UpgradeLevel: 0
   UpgradeValue: 0
   Owner: 0
   Type: 0
-  PriceMultiplyer: 0
-  UpgradeMultiplyer: 0
+  PriceMultiplyer: 1.1
+  UpgradeMultiplyer: 0.25

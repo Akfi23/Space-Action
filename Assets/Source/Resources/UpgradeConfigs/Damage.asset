@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Damage
   m_EditorClassIdentifier: 
   Icon: {fileID: 21300000, guid: 5138ab642c7ef446ca552424050e33ca, type: 3}
-  Price: 0
+  Price: 100
   UpgradeLevel: 0
   UpgradeValue: 0
   Owner: 0
   Type: 3
-  PriceMultiplyer: 0
-  UpgradeMultiplyer: 0
+  PriceMultiplyer: 1.1
+  UpgradeMultiplyer: 1
