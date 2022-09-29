@@ -13,6 +13,8 @@ namespace Kuhpik
     {
         public CinemachineVirtualCamera GameCamera { get; set; }
         public CinemachineVirtualCamera CombatCamera { get; set; }
+        public CinemachineVirtualCamera RocketCamera { get; set; }
+
 
         public void SetCombatCameraActive()
         {

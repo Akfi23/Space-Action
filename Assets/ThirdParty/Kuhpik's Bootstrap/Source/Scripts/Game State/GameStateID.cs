@@ -6,7 +6,7 @@
         // Otherwise all of your settings in inspector can be messed up.
 
         Loading = 0,
-        Menu = 1,
+        TapToStart = 1,
         Game = 2,
         Pause = 3,
         Lose = 10,

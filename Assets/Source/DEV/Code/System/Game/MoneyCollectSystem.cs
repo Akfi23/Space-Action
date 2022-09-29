@@ -35,14 +35,24 @@ namespace Akfi
 
                 Sequence sequence = DOTween.Sequence();
                 sequence.Append(coin.transform.DOJump(pos, 1, 1, 0.25f));
-                sequence.Append(coin.transform.DOJump(game.Player.transform.position, 1, 1, 0.15f).SetDelay(0.15f));
-                sequence.AppendCallback(() => coin.gameObject.SetActive(false));
+                sequence.AppendCallback(() => StartCoroutine(MoveCoinToPlayer(coin)));
             }
 
             yield return new WaitForSeconds(0.65f);
 
             player.Money += enemy.Reward;
             screen.UpdateMoney(player.Money);
+        }
+
+        private IEnumerator MoveCoinToPlayer(GameObject coin)
+        {
+            while (coin.activeSelf)
+            {
+                yield return null;
+                coin.transform.position = Vector3.Slerp(coin.transform.position, game.Player.transform.position+Vector3.up*2f, 50 * Time.deltaTime);
+            }
+
+            coin.SetActive(false);
         }
     }
 }

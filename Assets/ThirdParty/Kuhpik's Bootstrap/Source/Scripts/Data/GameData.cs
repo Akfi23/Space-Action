@@ -4,6 +4,7 @@ using NaughtyAttributes;
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
+using Akfi;
 
 namespace Kuhpik
 {
@@ -18,6 +19,9 @@ namespace Kuhpik
         // public Enemy[] Enemies;
 
         public bool isPlayerMoving;
+
+        public RocketComponent Rocket;
+        public RocketPosMarker LandingPos;
 
         public PlayerComponent Player;
         public CompanionComponent Companion;

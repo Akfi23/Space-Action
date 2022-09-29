@@ -3,5 +3,7 @@
     {
         Stone,
         Gold,
-        Tree
+        Tree,
+        RedCrystall,
+        BlueCrystall
     }

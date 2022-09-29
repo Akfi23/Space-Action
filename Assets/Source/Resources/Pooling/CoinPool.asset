@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   poolName: CoinPool
   capacity: 10
-  poolTime: 5
+  poolTime: 1
   dontDestroy: 1
   prefab: {fileID: 5933997875014648812, guid: af3cd4d0878c64317b085554dc18748c, type: 3}
   cachedComponents: []
