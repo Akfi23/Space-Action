@@ -15,6 +15,7 @@ public class PlayerLoadingSystem : GameSystemWithScreen<GameScreen>
 
         game.Player.Init();
         game.Player.UpdateAttackRange(config.PlayerConfig.AttackRadiusBase);
+        Debug.Log(config.PlayerConfig.AttackRadiusBase);
         game.Companion.Init();
 
         UpgradeStatsByData();
@@ -24,7 +25,8 @@ public class PlayerLoadingSystem : GameSystemWithScreen<GameScreen>
     {
         if (player.PlayerUpgradeDatas.Count == 0) return;
 
-        game.Player.UpdateAttackRange(config.PlayerConfig.ArmorBase + player.PlayerUpgradeDatas[UpgradeType.AttackRange].UpgradeValue);
-        game.Player.UpdateHealthValue(config.PlayerConfig.ArmorBase + player.PlayerUpgradeDatas[UpgradeType.Health].UpgradeValue);
+        Debug.Log("UPDATES LOADING");
+        game.Player.UpdateAttackRange(config.PlayerConfig.AttackRadiusBase + player.PlayerUpgradeDatas[UpgradeType.AttackRange].UpgradeValue);
+        game.Player.UpdateHealthValue(config.PlayerConfig.MaxHealthBase + player.PlayerUpgradeDatas[UpgradeType.Health].UpgradeValue);
     }
 }

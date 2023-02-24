@@ -30,5 +30,6 @@ public class EnemyCheckerComponent : MonoBehaviour
     public void UpdateCollider(float radius)
     {
         enemyCheckerColl.radius = radius;
+        Debug.Log("RADIUS " + radius);
     }
 }

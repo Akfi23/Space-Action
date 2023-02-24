@@ -47,7 +47,7 @@ public class EnemyComponent : CharacterComponent
         TakeDamage(bullet.Damage);
         fx.SetHitPosition(hitPos);
         bullet.gameObject.SetActive(false);
-        await ShowHitEffect();
+        //await ShowHitEffect();
         hitSignal.Dispatch(this);
     }
 
@@ -67,9 +67,9 @@ public class EnemyComponent : CharacterComponent
 
     private async UniTask ShowHitEffect()
     {
-        Color baseColor = Outline.FrontParameters.FillPass.GetColor(HitHash);
-        Outline.FrontParameters.FillPass.SetColor(HitHash, Color.white);
-        await UniTask.Delay(TimeSpan.FromSeconds(0.035f), ignoreTimeScale: true);
-        Outline.FrontParameters.FillPass.SetColor(HitHash, baseColor);
+        // Color baseColor = Outline.FrontParameters.FillPass.GetColor(HitHash);
+        // Outline.FrontParameters.FillPass.SetColor(HitHash, Color.white);
+        // await UniTask.Delay(TimeSpan.FromSeconds(0.035f), ignoreTimeScale: true);
+        // Outline.FrontParameters.FillPass.SetColor(HitHash, baseColor);
     }   
 }

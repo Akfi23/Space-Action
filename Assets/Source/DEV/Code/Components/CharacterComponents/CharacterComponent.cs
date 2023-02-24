@@ -12,13 +12,13 @@ public class CharacterComponent : MonoBehaviour
     protected NavMeshAgent agent;
     protected AnimatorComponent animator;
     protected FXHolderComponent fx;
-    protected Outlinable outlinableComponent;
+    //protected Outlinable outlinableComponent;
     protected Collider col;
 
     public NavMeshAgent Agent => agent;
     public AnimatorComponent Animator => animator;
     public FXHolderComponent FX => fx;
-    public Outlinable Outline => outlinableComponent;
+    //public Outlinable Outline => outlinableComponent;
     public float CurrentHealth => currentHealth;
     public float MaxHealth => maxHealth;
     public Collider Collider => col;
@@ -30,7 +30,7 @@ public class CharacterComponent : MonoBehaviour
         animator = GetComponent<AnimatorComponent>();
         animator.InitAnimator();
         fx = GetComponent<FXHolderComponent>();
-        outlinableComponent = GetComponent<Outlinable>();
+        //outlinableComponent = GetComponent<Outlinable>();
         col = GetComponent<Collider>();
     }
 
@@ -46,7 +46,7 @@ public class CharacterComponent : MonoBehaviour
     public virtual void Die()
     {
         animator.SetDie();
-        outlinableComponent.enabled = false;
+        //outlinableComponent.enabled = false;
     }
 
     public virtual void RenewStats()

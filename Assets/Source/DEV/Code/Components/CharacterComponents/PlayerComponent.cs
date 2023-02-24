@@ -45,6 +45,7 @@ public class PlayerComponent : CharacterComponent
 
     public void UpdateAttackRange(float radius)
     {
+        Debug.Log("RADIUS UPDATE "+radius);
         enemyChecker.UpdateCollider(radius);
         circle.DrawCircle(enemyChecker.EnemyCheckerColl.radius);
     }

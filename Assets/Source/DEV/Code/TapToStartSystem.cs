@@ -13,7 +13,7 @@ namespace Akfi
             game.Rocket.StartFX.Play();
             game.Player.gameObject.SetActive(false);
             game.Player.transform.localScale = Vector3.one * 0.3f;
-
+            
             Sequence sequence = DOTween.Sequence();
             sequence.Append(game.Rocket.transform.DOMove(game.LandingPos.transform.position+Vector3.up*4,3f));
             sequence.AppendCallback(()=>game.Player.gameObject.SetActive(true));
